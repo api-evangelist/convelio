@@ -1,0 +1,1561 @@
+openapi: 3.1.0
+info:
+  title: Convelio Public Shipping API
+  version: '2.0'
+  contact:
+    name: Convelio API Team
+    email: api@convelio.com
+    url: https://www.convelio.com
+  termsOfService: https://www.convelio.com/fr/termes/
+  license:
+    name: MIT
+    url: https://www.convelio.com/fr/termes/
+  description: '**This document describes the current version (2.0) of the Shipping API.**
+
+
+    The Convelio API is organized around REST. Our API has predictable resource-oriented urls, accept and return json-encoded requests and
+
+    responses. It also use standard HTTP response codes, authentication, and verbs.
+
+
+    You can use the Convelio API in sandbox mode, which does not affect your live data or interact with the live api.
+
+    The API key you use to authenticate the request determine whether the request is live mode or sandbox mode.
+
+
+    # API key
+
+    Convelio authenticates your API requests using your account’s API key. If you do not include your key when making an API request,
+
+    or use one that is incorrect, Convelio returns an error.
+
+
+    Your API key has a *Secret* type, prefixed by *sk*, and should be kept confidential and only stored on your own servers.
+
+    Your account’s secret API key can perform any API request to Convelio without restriction.
+
+
+    There are also two **modes** for your API key: *live* and *test*.
+
+    - *live* key can only be used on our production server.
+
+    - *test* key can only be used on our sandbox server.
+
+
+    <b>Example of key by modes</b>
+
+
+    | **Type** \\ **Mode** | Test                              | Live                              |
+
+    |---------------------|-----------------------------------|-----------------------------------|
+
+    | Secret              | REDACTED_STRIPE_KEY | REDACTED_STRIPE_KEY |
+
+
+    <b>Obtaining your API key</b>
+
+
+    To get your API key, please send your request at api@convelio.com.'
+  x-logo:
+    url: public/assets/icons/convelio-black-spaced.svg
+    altText: Convelio logo
+servers:
+- url: https://api.sandbox.convelio.com/v2
+  description: Sandbox
+- url: https://api.convelio.com/v2
+  description: Production
+security:
+- secret_token: []
+tags:
+- name: shipping
+  x-displayName: Shipping API
+  description: Shipping API allow you to request a shipping estimate from our system
+paths:
+  /shipping/estimate/price:
+    post:
+      summary: Shipment estimation
+      description: Use this endpoint to obtain a first estimation for a shipment.
+      operationId: estimateShippingPrice
+      tags:
+      - shipping
+      security:
+      - secret_token: []
+      parameters:
+      - $ref: '#/components/parameters/currency-code'
+      - $ref: '#/components/parameters/json-content-type'
+      - $ref: '#/components/parameters/accept'
+      requestBody:
+        $ref: '#/components/requestBodies/estimate-price'
+      responses:
+        '200':
+          description: Shipment rate estimation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/price'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '422':
+          $ref: '#/components/responses/unprocessable-entity'
+          description: No shipment estimation available for given request / ValidationFailed
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /shipping/quote:
+    post:
+      summary: Request a quote
+      description: Get a quote from Convelio. An operations representative will get in contact with you if necessary.
+      operationId: createShippingQuote
+      tags:
+      - shipping
+      security:
+      - secret_token: []
+      parameters:
+      - $ref: '#/components/parameters/currency-code'
+      - $ref: '#/components/parameters/json-content-type'
+      - $ref: '#/components/parameters/accept'
+      requestBody:
+        $ref: '#/components/requestBodies/quote'
+      responses:
+        '201':
+          description: Quote created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/unprocessable-entity'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /shipping/quote/{quoteId}:
+    parameters:
+    - $ref: '#/components/parameters/quote-id'
+    - $ref: '#/components/parameters/json-content-type'
+    - $ref: '#/components/parameters/accept'
+    get:
+      summary: Get quote
+      description: Retrieve a quote by its ID.
+      operationId: getShippingQuote
+      tags:
+      - shipping
+      security:
+      - secret_token: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/quote'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '422':
+          $ref: '#/components/responses/unprocessable-entity'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /shipping/order:
+    post:
+      summary: Create an Order
+      description: Create an order for given Quote ID.
+      operationId: createShippingOrder
+      tags:
+      - shipping
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/currency-code'
+      - $ref: '#/components/parameters/json-content-type'
+      - $ref: '#/components/parameters/accept'
+      requestBody:
+        $ref: '#/components/requestBodies/order'
+      responses:
+        '201':
+          description: Order Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        '400':
+          $ref: '#/components/responses/bad-request'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/unprocessable-entity'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+components:
+  schemas:
+    multi-part-item:
+      title: MultiPartItem
+      description: Item consisting of multiple parts
+      type: object
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/item.base'
+      - properties:
+          parts:
+            type: array
+            description: Item parts
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/part'
+        required:
+        - parts
+    price:
+      title: Price
+      x-tags:
+      - Models
+      readOnly: true
+      properties:
+        currency_code:
+          type: string
+          title: Money
+          description: Shipping estimate price's currency code. Accepted currencies are EUR, USD and GBP.
+          example: EUR
+        vat_excluded_amount:
+          type: integer
+          description: 'Amount is a positive integer or zero. Estimated price of the shipping excluding taxes. A positive integer representing the
+
+            price of the quote in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100,
+
+            a zero-decimal currency). The minimum amount is $0.50 US or equivalent in charge currency. The amount
+
+            value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+
+            '
+          example: 10000
+        vat_included_amount:
+          type: integer
+          description: 'Amount is a positive integer or zero. Estimated price of the shipping including taxes. A positive integer representing the
+
+            price of the quote in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100,
+
+            a zero-decimal currency). The minimum amount is $0.50 US or equivalent in charge currency. The amount
+
+            value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+
+            '
+          example: 12000
+        vat_amount:
+          type: integer
+          description: 'Amount is a positive integer or zero. Estimated price of the taxes. A positive integer representing the
+
+            price of the quote in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100,
+
+            a zero-decimal currency). The minimum amount is $0.50 US or equivalent in charge currency. The amount
+
+            value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+
+            '
+          example: 2000
+        insurance_amount:
+          type: integer
+          description: 'Amount is a positive integer or zero. Estimated price of the insurance including taxes. A positive integer representing the
+
+            price of the quote in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100,
+
+            a zero-decimal currency). The minimum amount is $0.50 US or equivalent in charge currency. The amount
+
+            value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+
+            '
+          example: 700
+    desired-packing:
+      title: DesiredPacking
+      x-tags:
+      - Enums
+      description: 'Leave empty by default.
+
+        - masterpack: Convelio will soft-wrap the item and place it into a cardboard box.'
+      type: string
+      enum:
+      - masterpack
+      - cardboard_box_stdo_c1
+      - cardboard_box_stdo_c2
+      - cardboard_box_stdo_c3
+      - cardboard_box_stdo_c4
+      - cardboard_box_stdo_c5
+      - cardboard_box_stdo_c6
+      - cardboard_box_stdo_fp1
+      - cardboard_box_stdo_fp2
+      - cardboard_box_stdo_t1
+      - cardboard_box_stdo_j1
+      - cardboard_box_stdo_j2
+      - cardboard_box_stdo_f1
+      - cardboard_box_stdo_largetube
+      - cardboard_box_stdo_2c1
+      - cardboard_box_stdo_3c1
+      - cardboard_box_stdo_2c2
+      - cardboard_box_stdo_3c2
+      - cardboard_box_stdo_2c3
+      - cardboard_box_stdo_3c3
+      - cardboard_box_stdo_2c4
+      - cardboard_box_stdo_3c4
+      - cardboard_box_stdo_2c5
+      - cardboard_box_stdo_3c5
+      - cardboard_box_stdo_2c6
+      - cardboard_box_stdo_3c6
+      - cardboard_box_stdo_2fp1
+      - cardboard_box_stdo_3fp1
+      - cardboard_box_stdo_2fp2
+      - cardboard_box_stdo_3fp2
+      - woodcrate_nsdp_pp
+      - woodcrate_nsdp_g
+      - woodcrate_nsdp_ppg
+      - woodcrate_nsdp_cw
+      - woodcrate_nsdp_tf
+      - woodcrate_nsdp_tfw
+      - woodcrate_nsdp_af
+      - woodcrate_nsdo_scs
+      - woodcrate_nsdo_scl
+    delivery:
+      title: Delivery
+      type: object
+      description: Delivery details.
+      properties:
+        type:
+          $ref: '#/components/schemas/delivery-type'
+        address:
+          $ref: '#/components/schemas/address'
+        contact:
+          $ref: '#/components/schemas/contact'
+        company_name:
+          type: string
+          maxLength: 255
+          description: Delivery company name.
+          example: Company Name LTD
+        additional_info:
+          type: string
+          example: Additional information regarding the delivery.
+          description: Additional information regarding the delivery.
+      required:
+      - type
+      - address
+    part:
+      title: ItemPart
+      description: Item consisting of multiple parts
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/dimension'
+      - type: object
+        properties:
+          description:
+            type: string
+            maxLength: 255
+            example: Table legs
+          quantity:
+            type: integer
+            default: 1
+            description: Item quantity.
+            minimum: 1
+            multipleOf: 1
+        required:
+        - description
+        - quantity
+    contract-insurance:
+      title: ContractInsurance
+      description: You can add an Ad Valorem insurance that will compensate your prejudice in the event of damage, theft or loss (up to the declared value of your items and shipping costs, in case of total loss).
+      type: boolean
+      default: false
+    order-create:
+      title: RequestBodyCreateShippingOrder
+      type: object
+      properties:
+        quote_id:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Quote ID, which is the base of the Order
+          format: uuid
+        billing_details:
+          description: Required when no default billing details are set. Please, contact Convelio.
+          $ref: '#/components/schemas/billing-details'
+          required:
+          - vat_number
+        customer_reference_number:
+          type: string
+          maxLength: 255
+          example: REF123456
+      required:
+      - quote_id
+    phone:
+      title: Phone
+      type: string
+      maxLength: 255
+      examples:
+      - '+442033188673'
+      - +44 2 033 188 673
+      - +44 20 33 18 86 73
+      - 44;2033188673;gb
+      description: "Phone number with following formats:\n\n- **International E.164 formats**:<br>\n  Example: `+33123123123` or `+33 1 23 12 31 23`\n  - `+33`: Country code with a `+` prefix\n  - `123123123`: Local phone number\n\n  Spaces between digits are supported, but cleaned on our side.<br><br>\n\n- **Format with country code, local number, and country ISO2 code**:<br>\n   Example: `33;12312313;fr`\n     - `33`: Country code (international dialing code)\n     - `12312313`: Local phone number\n     - `fr`: Country `ISO 3166-1 alpha-2` code (France in this example)\n\n   The parts are separated by semicolons (`;`)."
+    item-type:
+      title: ItemType
+      description: 'Available options:
+
+
+        - fine_art.painting: Fine art painting
+
+        - fine_art.picture: Fine art picture
+
+        - fine_art.sculpture: Fine art sculpture
+
+        - fine_art.installation: Fine art installation
+
+        - furniture.chair: Furniture chair
+
+        - furniture.armchair: Furniture armchair
+
+        - furniture.sofa: Furniture sofa, bed or daybed
+
+        - furniture.cabinet: Furniture sideboard, cabinet or chest of drawers
+
+        - furniture.mirror: Furniture mirror
+
+        - furniture.table: Furniture table
+
+        - lamp.chandelier: Lamp chandelier
+
+        - lamp.sconce: Lamp sconce
+
+        - lamp.table: Table lamp
+
+        - decorative.rug: Rug, carpet, tapestry or textile art
+
+        - decorative.ceramics: Ceramics
+
+        - decorative.tableware: Tableware
+
+        - decorative.clock: Clock or barometer
+
+        - decorative.artefact: Artefact or "object of vertu"
+
+        - collectibles.jersey: Clothing
+
+        - collectibles.sneakers: Sneakers
+
+        - collectibles.helmet: Helmet
+
+        - other.other: Items of another nature
+
+        - other.jewelry: Jewelry
+
+        - other.watch: Watch
+
+        - other.book_or_manuscript: Book or manuscript
+
+        - other.handbag: Handbag
+
+
+        Deprecated values (still accepted for backward compatibility, remapped server-side to `other.other`):
+
+
+        - fine_art.other
+
+        - furniture.other
+
+        - lamp.other
+
+        - decorative.other
+
+        - collectibles.other'
+      type: string
+      default: other.other
+    item-materials:
+      title: ItemMaterials
+      description: 'Available options:
+
+
+        - glass: Glass, crystal or mirror
+
+        - stone: Marble, other natural stone and composites
+
+        - ceramic: Ceramic, porcelain, terracotta, and earthenware
+
+        - plaster_concrete: Concrete, plaster, and cement-like materials
+
+        - resin: Resins, plastics and polymers
+
+        - none: The item does not contain any of the other materials
+
+        - ornate_frame: The frame is ornate or fragile
+
+        - framed_glass: Framed with glass
+
+        - unframed: Unframed
+
+        - lacquered: Lacquered surface
+
+        - stackable: The item can be stacked
+
+        - dismountable: The item can be dismounted
+
+        - dismountable_top: Removable top
+
+        - dismountable_shade: Removable lampshade
+
+        - lightbulbs: The item contains lightbulbs
+
+        - glass_stone_top: The item has a glass or stone top
+
+        - rolled_in_plastic: Rolled and plastic-wrapped
+
+        - can_be_rolled: The item can be rolled
+
+        - can_be_folded: The item can be folded
+
+        - hinged: The item is hinged
+
+        - horizontal: Must travel flat
+
+        - pastel: The item is a pastel
+
+        - protruding: Raised or protruding areas
+
+        - wet: The item is wet (e.g. fresh paint)
+
+
+        **Invalid values will be matched to `none`**
+
+
+        Deprecated / remapped values: some legacy values are still accepted but are
+
+        remapped server-side to the new characteristics depending on the item type:
+
+
+        - For paintings and pictures, `glass` is remapped to `framed_glass`.
+
+        - For tables and cabinets, `glass` and `stone` are remapped to `glass_stone_top`.
+
+
+        **Allowed characteristics per item type.** Only the values listed for the item''s
+
+        `type` apply. A value sent for a type that does not allow it is dropped (or
+
+        remapped where noted above); `none` is always accepted.
+
+
+        - `fine_art.painting`: ornate_frame, wet, protruding, unframed, framed_glass, horizontal, hinged
+
+        - `fine_art.picture`: ornate_frame, unframed, framed_glass, horizontal, hinged, pastel
+
+        - `fine_art.sculpture`, `fine_art.installation`: glass, stone, ceramic, plaster_concrete, resin
+
+        - `furniture.chair`, `furniture.sofa`: glass, plaster_concrete, resin, lacquered, stackable
+
+        - `furniture.armchair`: glass, plaster_concrete, resin, lacquered
+
+        - `furniture.table`, `furniture.cabinet`: glass_stone_top, lacquered, dismountable_top
+
+        - `furniture.mirror`: glass, ornate_frame, horizontal
+
+        - `lamp.chandelier`: glass, stone, ceramic, plaster_concrete, resin, dismountable, lightbulbs
+
+        - `lamp.sconce`: glass, stone, ceramic, plaster_concrete, resin, lightbulbs
+
+        - `lamp.table`: glass, stone, ceramic, plaster_concrete, resin, dismountable_shade, lightbulbs
+
+        - `decorative.rug`: rolled_in_plastic, can_be_rolled, can_be_folded
+
+        - `decorative.ceramics`: ceramic
+
+        - `decorative.tableware`: ceramic, plaster_concrete, resin
+
+        - `decorative.clock`: glass, stone
+
+        - `decorative.artefact`, `other.other`: glass, stone, ceramic, plaster_concrete, resin
+
+        - `collectibles.jersey`, `collectibles.sneakers`, `collectibles.helmet`, `other.jewelry`, `other.watch`, `other.handbag`, `other.book_or_manuscript`: `none` only (no characteristics)'
+      type: array
+      items:
+        type: string
+      example:
+      - stone
+      - glass
+    http-error:
+      title: HttpError
+      x-tags:
+      - Error responses
+      description: 'The error model for the API follow the Content-Type **application/problem+json** defined by the [IETF RFC 7807](https://tools.ietf.org/html/rfc7807).
+
+
+        Description of the errors:
+
+        - Bad Request (400): The URL requested is not valid.
+
+        - Unauthorized (401): Token not found.
+
+        - Forbidden (403): You are authenticated but not allowed to execute the action.
+
+        - Not Found (404): Page not found.
+
+        - Unprocessable Entity (422): The server was unable to process the request.
+
+        - Internal Server Error (500): There is an internal problem on our server.
+
+        - Service Unavailable (503): The server is not ready to handle the request.
+
+        '
+      type: object
+      properties:
+        type:
+          type: string
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+          description: 'A URL to a page with more details regarding the problem.
+
+            The primary identifier for the problem.
+
+            It''s typically an absolute URL that leads to an HTML page containing human-readable documentation regarding the problem.'
+        title:
+          type: string
+          description: Short human-readable summary of the problem.
+          example: Forbidden
+        status:
+          type: integer
+          description: 'The HTTP status code.
+
+            It''s always the same as the status code in the HTTP header.
+
+            It''s only included for the convenience of the consumer.'
+          example: 403
+          minimum: 100
+        detail:
+          type: string
+          description: Human-readable description of this specific problem.
+          example: Forbidden
+      required:
+      - type
+      - title
+      - status
+      - detail
+    quote-status:
+      title: Quote Status
+      x-tags:
+      - Enums
+      description: '- created: The API successfully returned an instant shipping price and the quote has been created in Convelio''s system.
+
+        - processing: The API could not return an instant shipping price for some reason (geography, over-sized item, high commercial value) and Convelio''s Operational team is working on providing a Custom Quote within 24h.'
+      readOnly: true
+      type: string
+      enum:
+      - created
+      - processing
+    pickup:
+      title: Pickup
+      type: object
+      properties:
+        company_name:
+          type: string
+          maxLength: 255
+          example: Company Name LTD
+          description: The company name.
+        address:
+          $ref: '#/components/schemas/address'
+        contacts:
+          type: array
+          description: Pickup contact details.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/contact'
+        items:
+          type: array
+          description: Pickup items.
+          minItems: 1
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/item'
+            - $ref: '#/components/schemas/multi-part-item'
+        additional_info:
+          type: string
+          example: Additional information regarding the pickup.
+          description: Additional information regarding the pickup.
+      required:
+      - items
+      - address
+    delivery-type:
+      title: DeliveryType
+      x-tags:
+      - Enums
+      description: 'Delivery options for the shipment. 2 possible values:
+
+        - curbside: Our drivers will unload the items and deliver them in front of the building at the scheduled time.
+
+        - white_glove: Our drivers will unload, unpack, check and install the product in the chosen room at the scheduled time. For a white-glove delivery, all the packages must fit in the staircase or in the elevator.
+
+        - front_door_with_signature: delivery like `white_glove` with mandatory signature (only for jewelry or watch items)'
+      type: string
+      enum:
+      - curbside
+      - white_glove
+      - front_door_with_signature
+      default: curbside
+    currency-code:
+      title: CurrencyCode
+      type: string
+      description: The currency code, according to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217)
+      enum:
+      - EUR
+      - USD
+      - GBP
+      default: EUR
+    shipment-estimation:
+      title: RequestBodyShipmentEstimation
+      type: object
+      properties:
+        delivery:
+          $ref: '#/components/schemas/delivery'
+        shipping_speed:
+          $ref: '#/components/schemas/speed-shipment-estimation'
+        direct_label_request:
+          $ref: '#/components/schemas/direct-label-request'
+        contract_insurance:
+          $ref: '#/components/schemas/contract-insurance'
+        pickups:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickup'
+      required:
+      - delivery
+    http-unprocessable-entity-error:
+      title: HttpUnprocessableEntityError
+      x-tags:
+      - Error responses
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/http-error'
+      - properties:
+          status:
+            example: 422
+          validation_messages:
+            type: object
+            description: Validation messages are only returned when your request have a body and the body is invalid.
+            properties:
+              '{field_name}':
+                type: object
+                description: 'The name of the field which is wrong in your request. Example: "delivery_type"'
+                properties:
+                  '{error_title}':
+                    type: string
+                    description: 'The title of the error. Example: "deliveryTypeInvalid"'
+                    example: 'Invalid delivery type. Valid values are: curbside, white_glove'
+            required:
+            - '{field_name}'
+    commercial-value:
+      title: CommercialValue
+      description: Item commercial value.
+      type: object
+      required:
+      - amount
+      - currency_code
+      properties:
+        amount:
+          type: integer
+          minimum: 0
+          description: Item commercial value amount. The amount is a positive integer or zero. A positive integer representing the price of the quote in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50 US or equivalent in charge currency. The amount value supports up to eight digits (e.g., a value of 99999999 for a USD charge of $999,999.99).
+          example: 15000
+        currency_code:
+          $ref: '#/components/schemas/currency-code'
+    billing-details:
+      title: BillingDetails
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/address'
+        name:
+          type: string
+          maxLength: 255
+          example: Art center
+        email:
+          type: string
+          maxLength: 255
+          format: email
+          example: art@center.org
+        phone:
+          $ref: '#/components/schemas/phone'
+        vat_number:
+          type: string
+          maxLength: 255
+          example: GB12345697
+        customer_reference_number:
+          type: string
+          maxLength: 255
+          example: REF123456
+        eori_number:
+          type: string
+          maxLength: 255
+          example: DE 1234567890 8
+      required:
+      - name
+      - email
+      - phone
+      - address
+    item.base:
+      title: ItemBase
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          example: Vase ming
+        description:
+          type: string
+          maxLength: 255
+          example: Vase ming XIV
+        quantity:
+          type: integer
+          default: 1
+          description: Item quantity.
+          minimum: 1
+          multipleOf: 1
+        current_packing:
+          $ref: '#/components/schemas/packing-type'
+        desired_packing:
+          $ref: '#/components/schemas/desired-packing'
+        measurement_system:
+          $ref: '#/components/schemas/measurement-system'
+          default: metric
+        type:
+          $ref: '#/components/schemas/item-type'
+        materials:
+          $ref: '#/components/schemas/item-materials'
+        value:
+          $ref: '#/components/schemas/commercial-value'
+      required:
+      - value
+      - current_packing
+      - description
+    dimension:
+      title: Dimension
+      type: object
+      properties:
+        length:
+          type: integer
+          description: Item length in cm or inch, depending on the measurement system used.
+          example: 100
+          multipleOf: 1
+          minimum: 1
+        height:
+          type: integer
+          description: Item height in cm or inch, depending on the measurement system used.
+          example: 100
+          multipleOf: 1
+          minimum: 1
+        width:
+          type: integer
+          description: Item width in cm or inch, depending on the measurement system used.
+          example: 100
+          multipleOf: 1
+          minimum: 1
+        weight:
+          type: integer
+          description: Item weight in kg or lbs, depending on the measurement system used.
+          example: 100
+          multipleOf: 1
+          minimum: 1
+      required:
+      - length
+      - height
+      - width
+    contact:
+      title: Contact
+      x-tags:
+      - Models
+      type: object
+      description: ''
+      properties:
+        first_name:
+          type: string
+          maxLength: 255
+          example: John
+          description: Contact's first name.
+        last_name:
+          type: string
+          maxLength: 255
+          example: Doe
+          description: Contact's last name.
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          example: john.doe@exemple.com
+          description: Contact's main email.
+        phone:
+          $ref: '#/components/schemas/phone'
+        additional_emails:
+          type: array
+          description: Contact's additional email addresses.
+          items:
+            type: string
+            format: email
+        additional_phones:
+          type: array
+          description: Contact's additional phone numbers.
+          items:
+            $ref: '#/components/schemas/phone'
+      required:
+      - first_name
+      - last_name
+      - email
+      - phone
+    direct-label-request:
+      title: DirectLabelRequest
+      x-tags:
+      - Enums
+      description: 'Direct label request.
+
+        Possible values:
+
+        - cheapest_option: API will return direct label prices if available and if direct label is the cheapest option.
+
+        - direct_label_only: API will always consider the direct label option if available and return direct label prices accordingly.
+
+        - direct_label_excluded: API will never consider the direct label option and therefore will never return direct label prices.'
+      type: string
+      enum:
+      - cheapest_option
+      - direct_label_only
+      - direct_label_excluded
+      default: cheapest_option
+    address:
+      title: Address
+      x-tags:
+      - Models
+      type: object
+      properties:
+        street:
+          type: string
+          maxLength: 255
+          description: Address's street.
+          example: 42 rue des allees
+        city:
+          type: string
+          maxLength: 255
+          example: Paris
+          description: Address's city.
+        state:
+          type: string
+          maxLength: 255
+          example: Ile-de-france
+          description: Address's state.
+        postcode:
+          type: string
+          maxLength: 255
+          example: '75004'
+          description: Address's postcode.
+        country_code:
+          $ref: '#/components/schemas/country-code'
+      required:
+      - country_code
+    item:
+      title: Item
+      x-tags:
+      - Models
+      type: object
+      description: Shipment Item
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/item.base'
+      - $ref: '#/components/schemas/dimension'
+    quote-create:
+      title: RequestBodyCreateShippingQuote
+      type: object
+      properties:
+        delivery:
+          $ref: '#/components/schemas/delivery'
+          required:
+          - contact
+        shipping_speed:
+          $ref: '#/components/schemas/shipping-speed'
+        direct_label_request:
+          $ref: '#/components/schemas/direct-label-request'
+        contract_insurance:
+          $ref: '#/components/schemas/contract-insurance'
+        pickups:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickup'
+            required:
+            - contacts
+        customer_email:
+          type: string
+          maxLength: 255
+          description: Add a customer email address to receive the quote by email.
+          format: email
+          example: person@example.com
+        customer_reference_number:
+          type: string
+          maxLength: 255
+        additional_info:
+          type: string
+          maxLength: 8000
+      required:
+      - delivery
+      - shipping_speed
+      - pickups
+    speed-shipment-estimation:
+      title: ShippingSpeedShipmentEstimation
+      x-tags:
+      - Enums
+      description: 'Freight speed.
+
+        Possible values:
+
+        - regular speed: Our standard air freight speed option.'
+      type: string
+      enum:
+      - regular_speed
+      default: regular_speed
+    packing-type:
+      title: PackingType
+      x-tags:
+      - Enums
+      description: '- not_packed: Your product is not protected by any kind of bubble warp or cardboard.
+
+        - wood_crated: Your product is fully covered in bubble warp and fragile corners are covered with cardboard. Also, you placed adapted protections inside the wooden crate to prevent your product from moving too much and to protect it even further. Last but not least, the wood crate is put on pallet.'
+      type: string
+      enum:
+      - not_packed
+      - wood_crated
+    order:
+      title: Order
+      x-tags:
+      - Models
+      description: ''
+      type: object
+      properties:
+        id:
+          description: Order ID.
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        order_reference_number:
+          type: string
+          example: CVO-288
+        contract_insurance:
+          $ref: '#/components/schemas/contract-insurance'
+        shipping_speed:
+          $ref: '#/components/schemas/shipping-speed'
+        pickups:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickup'
+        delivery:
+          $ref: '#/components/schemas/delivery'
+        price:
+          $ref: '#/components/schemas/price'
+        billing_details:
+          $ref: '#/components/schemas/billing-details'
+        tracking_link:
+          type: string
+          format: uri
+          description: Link to follow the progress of the shipping order.
+          example: https://tracking.convelio.com/example
+        dashboard_order_link:
+          type: string
+          format: uri
+          description: Link to see the details of the shipping order.
+          example: https://web.convelio.com/dashboard/order/288
+        customer_reference_number:
+          type: string
+          description: Customer/partner provided reference number.
+          maxLength: 255
+          example: REF123456
+    shipping-speed:
+      title: ShippingSpeed
+      x-tags:
+      - Enums
+      description: 'Freight speed.
+
+        Possible values:
+
+        - regular_speed: Our standard air freight speed option.
+
+        - express: After our standard-service pick up and packing, your goods take our priority flights and will be delivered in a shorter time.'
+      type: string
+      enum:
+      - regular_speed
+      - express
+    country-code:
+      title: CountryCode
+      x-tags:
+      - Enums
+      description: 'The country code according to
+
+        [iso-3166-1-alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+
+        '
+      type: string
+      example: FR
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - UM
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+    quote:
+      title: Quote
+      x-tags:
+      - Models
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the Quote.
+          example: 123e4567-e89b-12d3-a456-426614174000
+          readOnly: true
+        quote_reference_number:
+          type: string
+          description: This QVO number is a direct reference to the quote and is used to communicate with Convelio's operational and support teams.
+          example: QVO-001
+          readOnly: true
+        shipping_speed:
+          $ref: '#/components/schemas/shipping-speed'
+        direct_label_request:
+          $ref: '#/components/schemas/direct-label-request'
+        delivery:
+          $ref: '#/components/schemas/delivery'
+        pickups:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickup'
+        share_link:
+          type: string
+          description: Instant quote sharelink.
+          format: uri
+          example: https://web.convelio.com/sharelinkencoded
+        contract_insurance:
+          $ref: '#/components/schemas/contract-insurance'
+        customer_email:
+          type: string
+          maxLength: 255
+          description: Add a customer email address to receive the quote by email.
+          format: email
+          example: person@example.com
+        price:
+          $ref: '#/components/schemas/price'
+        status:
+          $ref: '#/components/schemas/quote-status'
+        customer_reference_number:
+          type: string
+          maxLength: 255
+          example: CRN123456789
+        additional_info:
+          type: string
+          maxLength: 8000
+          example: Additional information for customs.
+    measurement-system:
+      title: MeasurementSystem
+      description: Unit system used for the pickup.
+      type: string
+      enum:
+      - us
+      - metric
+  requestBodies:
+    estimate-price:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/shipment-estimation'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/shipment-estimation'
+    order:
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/order-create'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/order-create'
+    quote:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/quote-create'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/quote-create'
+  parameters:
+    quote-id:
+      name: quoteId
+      description: Quote ID
+      in: path
+      schema:
+        type: string
+      required: true
+    json-content-type:
+      name: Content-Type
+      description: Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`
+      in: header
+      schema:
+        type: string
+        enum:
+        - application/json
+        - application/vnd.convelio-shipping.v2+json
+        default: application/json
+    accept:
+      description: Accept header should be sent and should be `application/json`
+      name: Accept
+      in: header
+      schema:
+        type: string
+        enum:
+        - '*/*'
+        - application/json
+        default: application/json
+    currency-code:
+      name: currency
+      description: Currency to use for the response. Accepted currencies are EUR, USD and GBP.
+      in: query
+      schema:
+        $ref: '#/components/schemas/currency-code'
+  responses:
+    bad-request:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Bad Request
+            status: 400
+            detail: Bad Request.
+    internal-server-error:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Internal Server Error
+            status: 500
+            detail: There is an internal problem on our server.
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Unauthorized
+            status: 401
+            detail: Token not found.
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Forbidden
+            status: 403
+            detail: You are authenticated but not allowed to execute the action.
+    unprocessable-entity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-unprocessable-entity-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Unprocessable Entity
+            status: 422
+            detail: The server was unable to process the request.
+            validation_messages:
+              '{field_name}':
+                '{error_title}': 'Invalid delivery type. Valid values are: curbside, white_glove'
+    not-found:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Not Found
+            status: 404
+            detail: Page not found.
+  securitySchemes:
+    convelio_signature:
+      name: X-Convelio-signature
+      description: An HMAC SHA256 signature created with the body data and the API secret token.
+      in: header
+      type: apiKey
+    secret_token:
+      name: Authorization
+      type: apiKey
+      in: header
+      description: token <your_token_here>
+      x-convelio-example: token {{secret_token}}
+      x-convelio-sensitive: true
+x-tagGroups:
+- name: Endpoints
+  tags:
+  - shipping
+  - webhook
+- name: Schemas
+  tags:
+  - Error responses
+  - Models
+  - Enums
+- name: Resources
+  tags:
+  - api-status-page

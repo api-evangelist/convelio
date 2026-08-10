@@ -1,0 +1,68 @@
+generated: '2026-08-09'
+method: probed
+source: live GET of /.well-known/* on every Convelio host in apis.yml and the OpenAPI servers[]
+summary: >-
+  Convelio publishes NO /.well-known/ discovery surface on any host. Every canonical
+  path returned 404 on the API hosts (api.convelio.com, api.sandbox.convelio.com), the
+  developer portal (developers.convelio.com) and the help centre (help.convelio.com).
+  The web app hosts (web.convelio.com, tracking.convelio.com) answer HTTP 200 to every
+  /.well-known/* path, but with the Angular single-page-app HTML shell, not a document —
+  these are SPA catch-alls and are recorded as false positives, not as hits. No
+  security.txt, no api-catalog, no OpenID/OAuth metadata, no ai-plugin, no agent card.
+hosts:
+- host: https://api.convelio.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://api.sandbox.convelio.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://developers.convelio.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://www.convelio.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /llms.txt, status: 404}
+- host: https://help.convelio.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  - {path: /llms.txt, status: 404}
+- host: https://web.convelio.com
+  note: >-
+    Angular SPA catch-all — returns HTTP 200 with a 70KB HTML application shell for
+    EVERY /.well-known/* path probed. Treated as no document present.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, accepted: false}
+  - {path: /.well-known/agent-card.json, status: 200, content_type: text/html, accepted: false}
+  - {path: /.well-known/agent.json, status: 200, content_type: text/html, accepted: false}
+- host: https://tracking.convelio.com
+  note: >-
+    Angular SPA catch-all — same behaviour as web.convelio.com. Treated as no document
+    present.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, content_type: text/html, accepted: false}
+  - {path: /.well-known/agent-card.json, status: 200, content_type: text/html, accepted: false}
+  - {path: /.well-known/agent.json, status: 200, content_type: text/html, accepted: false}
+files: []

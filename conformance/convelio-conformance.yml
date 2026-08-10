@@ -1,0 +1,77 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/convelio-shipping-openapi.yml
+docs: https://developers.convelio.com/
+summary: >-
+  Convelio's conformance posture is narrow but honest: a valid OpenAPI 3.1.0 contract, an
+  RFC 7807-shaped error body, ISO 3166-1 alpha-2 country codes, and HMAC-SHA256 webhook
+  signing. It asserts no industry standard beyond that, and — importantly — publishes no
+  security or compliance certifications at all. No trust centre, no SOC 2 / ISO 27001 /
+  PCI claim, no security.txt, no vulnerability-disclosure policy. For a company that
+  takes custody of high-value insured objects and processes payment for them, the absence
+  of a published compliance surface is the notable finding.
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: 'openapi: 3.1.0 document published at developers.convelio.com, 6 paths / 9 operations / 43 component schemas / 5 declared webhooks'
+- id: rfc7807-problem-details
+  conforms: partial
+  evidence: >-
+    The http-error schema explicitly cites IETF RFC 7807 and uses the type/title/status/
+    detail shape, but every error response declares content type application/json rather
+    than application/problem+json, and `type` is a generic W3C status-code URL rather
+    than a Convelio-owned problem-type identifier.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Convelio cites RFC 7807, which RFC 9457 obsoleted; no 9457-specific features (instance, extension members registry) are used.
+- id: iso-3166-1-alpha-2
+  conforms: true
+  evidence: 'country-code schema documented as ISO 3166-1 alpha-2, linked to the ISO 3166-1 alpha-2 reference'
+- id: iso-4217-currency
+  conforms: partial
+  evidence: 'currency-code uses ISO 4217 codes but restricts the set to EUR, USD, GBP'
+- id: hmac-sha256-webhook-signing
+  conforms: true
+  evidence: 'securityScheme convelio_signature — X-Convelio-signature header, HMAC SHA256 over the body keyed with the API secret token'
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securityScheme in the OpenAPI; authentication is a single header API key
+- id: oidc
+  conforms: false
+  evidence: no openIdConnect securityScheme; /.well-known/openid-configuration returns 404 on every host
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: '/.well-known/security.txt returns 404 on api.convelio.com, api.sandbox.convelio.com, developers.convelio.com, www.convelio.com and help.convelio.com'
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header contract documented; no deprecated operations in the spec
+- id: rfc8615-well-known
+  conforms: false
+  evidence: no /.well-known/ documents served on any host — see well-known/convelio-well-known.yml
+- id: idempotency-key
+  conforms: false
+  evidence: no Idempotency-Key parameter or header anywhere in the spec; POST /shipping/quote and POST /shipping/order are not retry-safe
+- id: json-api
+  conforms: false
+  evidence: plain resource-oriented JSON, no JSON:API document structure
+- id: asyncapi
+  conforms: false
+  evidence: no AsyncAPI document; events are declared in the OpenAPI 3.1 webhooks block instead
+- id: mcp
+  conforms: false
+  evidence: no Model Context Protocol server published or discoverable
+- id: a2a
+  conforms: false
+  evidence: '/.well-known/agent-card.json and /.well-known/agent.json return 404 on every first-party host'
+certifications:
+  published: []
+  trust_center: null
+  note: >-
+    Probed trust.convelio.com, security.convelio.com, www.convelio.com/security,
+    /trust and /compliance — none resolve or return a compliance page. Convelio markets
+    insurance coverage on shipments but publishes no information-security certification.
+transport_security:
+  tls: TLSv1.3 on www, developers and api hosts
+  hsts: false
+  dnssec: true
+  see: security/convelio-domain-security.yml

@@ -1,0 +1,83 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Convelio Shipping API
+  version: 1.0.0
+extends: openapi/convelio-shipping-openapi.yml
+x-generated: '2026-08-09'
+x-method: generated
+x-source: openapi/convelio-shipping-openapi.yml
+x-note: >-
+  Non-destructive annotations layered over Convelio's own OpenAPI 3.1.0 document. The
+  harvested spec in openapi/ is never mutated. These actions record what API Evangelist
+  observed about the contract — provenance, the environment/key coupling, the retry
+  hazard on the two creating POSTs, and the divergence between the documented
+  problem+json media type and the declared application/json.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://apis.io/provider/convelio/
+    x-apievangelist-source: https://developers.convelio.com/
+    x-apievangelist-harvested: '2026-08-09'
+    x-apievangelist-harvest-method: >-
+      Extracted from the __redoc_state payload server-rendered into
+      https://developers.convelio.com/ — Convelio publishes no standalone
+      /openapi.json or /openapi.yaml.
+- target: $.info
+  update:
+    x-api-key-provisioning:
+      self_service: false
+      contact: api@convelio.com
+    x-environment-selection: >-
+      The API key prefix selects the environment. sk_test_ keys authenticate only
+      against https://api.sandbox.convelio.com/v2; sk_live_ keys only against
+      https://api.convelio.com/v2.
+- target: $.paths['/shipping/quote'].post
+  update:
+    x-idempotency:
+      supported: false
+      hazard: >-
+        Non-idempotent POST that creates a billable commercial record. A retry after a
+        timeout produces a duplicate quote; there is no server-side dedupe key.
+    x-async-branch: >-
+      A 201 may carry status `processing` rather than a price. In that case the quote is
+      resolved out of band by Convelio's operations team within 24h and announced by the
+      custom_quote_ready webhook.
+- target: $.paths['/shipping/order'].post
+  update:
+    x-idempotency:
+      supported: false
+      hazard: >-
+        Non-idempotent POST that books and bills a physical fine art shipment. This is
+        the highest-consequence operation in the API and has no retry-safety contract.
+    x-agentic-consequence: physical
+    x-no-read-path: >-
+      There is no getOrder or listOrders operation. Once created, an order is observable
+      only through the shipment_status_changed and document_ready webhooks or the web
+      dashboard.
+- target: $.components.schemas['http-error']
+  update:
+    x-apievangelist-note: >-
+      The schema description promises Content-Type application/problem+json per RFC 7807,
+      but every error response in this document declares application/json. The body shape
+      is problem-details; the advertised media type is not.
+    x-problem-type-registry: >-
+      The example `type` is the generic W3C RFC 2616 status-code page rather than a
+      Convelio-owned problem-type URI, so clients cannot branch on `type` to
+      distinguish two errors sharing a status code.
+- target: $.components.schemas['orde-created-event']
+  update:
+    x-apievangelist-note: >-
+      Schema name is misspelled in the published document ("orde-created-event" for
+      OrderCreatedEvent). Recorded verbatim in the harvested spec, flagged here.
+- target: $.webhooks
+  update:
+    x-delivery-contract:
+      signature_header: X-Convelio-signature
+      algorithm: HMAC-SHA256 over the body, keyed with the account API secret token
+      expected_response: 204
+      retries: not documented
+      replay: not documented
+    x-apievangelist-note: >-
+      Convelio declares its five events in the OpenAPI 3.1 webhooks block with a typed
+      schema each — a machine-readable event surface, even though no AsyncAPI document
+      is published.

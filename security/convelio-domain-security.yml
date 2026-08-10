@@ -1,0 +1,26 @@
+generated: '2026-08-09'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.convelio.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  3 07:53:19 2026 GMT
+  hsts: false
+- host: developers.convelio.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov  2 00:13:09 2026 GMT
+  hsts: false
+- host: api.convelio.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 22 11:33:33 2026 GMT
+  hsts: null
+domains:
+- domain: convelio.com
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

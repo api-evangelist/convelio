@@ -1,23 +1,131 @@
 aid: convelio
 name: Convelio
-description: 'Convelio is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Convelio is a Paris- and London-based tech-enabled fine art logistics
+  company that moves high-value, fragile and oversized objects — paintings, sculpture,
+  antiques and design — for galleries, auction houses, art fairs, dealers, collectors
+  and online marketplaces. Its differentiator is an instant-pricing engine that returns
+  an all-inclusive door-to-door shipping price (packing, crating, customs, road/air/sea
+  freight, insurance and white-glove delivery) in place of the multi-day manual quoting
+  the art-handling trade traditionally runs on. Convelio exposes that engine to partners
+  as the Convelio Public API — a REST Shipping API (v2.0) documented with OpenAPI 3.1
+  at developers.convelio.com — plus an embeddable checkout widget, a web dashboard and
+  a tracking surface, so marketplaces and auction platforms can price, book and track
+  fine art shipments inside their own product.'
 url: https://raw.githubusercontent.com/api-evangelist/convelio/refs/heads/main/apis.yml
+image: https://www.convelio.com/favicon.ico
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-09'
 modified: '2026-08-09'
 tags:
 - Company
-apis: []
+- Logistics
+- Shipping
+- Fine Art
+- Freight
+- Ecommerce
+- Quotes
+- Webhooks
+- Customs
+- Insurance
+apis:
+- aid: convelio:convelio-shipping-api
+  name: Convelio Shipping API
+  description: Shipping API allow you to request a shipping estimate from our system
+  humanURL: https://developers.convelio.com/
+  baseURL: https://api.convelio.com/v2
+  tags:
+  - shipping
+  properties:
+  - type: OpenAPI
+    url: openapi/convelio-shipping-api-openapi.yml
+  - type: Documentation
+    url: https://developers.convelio.com/
+  - type: APIReference
+    url: https://developers.convelio.com/#tag/shipping
+  - type: Webhooks
+    url: asyncapi/convelio-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/convelio-problem-types.yml
+  - type: DataModel
+    url: data-model/convelio-data-model.yml
+- aid: convelio:convelio-webhook-api
+  name: Convelio Webhook API
+  description: The Webhook API allows an API partner to create and manage webhooks.
+  humanURL: https://developers.convelio.com/
+  baseURL: https://api.convelio.com/v2
+  tags:
+  - webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/convelio-webhook-api-openapi.yml
+  - type: Documentation
+    url: https://developers.convelio.com/
+  - type: APIReference
+    url: https://developers.convelio.com/#tag/shipping
+  - type: Webhooks
+    url: asyncapi/convelio-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/convelio-problem-types.yml
+  - type: DataModel
+    url: data-model/convelio-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/convelio-agentic-access.yml
+- type: DomainSecurity
+  url: security/convelio-domain-security.yml
+- type: Authentication
+  url: authentication/convelio-authentication.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://www.convelio.com/
+- type: DeveloperPortal
+  url: https://developers.convelio.com/
+- type: Documentation
+  url: https://developers.convelio.com/
+- type: APIReference
+  url: https://developers.convelio.com/#tag/shipping
+- type: GettingStarted
+  url: https://developers.convelio.com/#section/API-key
+- type: Support
+  url: https://help.convelio.com/en
+- type: Blog
+  url: https://www.convelio.com/en/blog/
+- type: GitHubOrganization
+  url: https://github.com/convelio
+- type: SignUp
+  url: https://web.convelio.com/auth/signup-email
+- type: Login
+  url: https://web.convelio.com/
+- type: TermsOfService
+  url: https://www.convelio.com/en/terms/
+- type: PrivacyPolicy
+  url: https://www.convelio.com/en/privacy/
+- type: StatusPage
+  url: https://developers.convelio.com/status
+- type: Conventions
+  url: conventions/convelio-conventions.yml
+- type: Lifecycle
+  url: lifecycle/convelio-lifecycle.yml
+- type: Sandbox
+  url: sandbox/convelio-sandbox.yml
+- type: Conformance
+  url: conformance/convelio-conformance.yml
+- type: Packages
+  url: packages/convelio-packages.yml
+- type: Components
+  url: components/convelio-components.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/convelio-llms.txt
+x-enrichment:
+  date: '2026-08-09'
+  status: enriched
+  artifacts_added: 15
+  pass: local-v1

@@ -1,0 +1,67 @@
+generated: '2026-08-09'
+method: searched
+source: https://developers.convelio.com/#section/API-key
+summary: >-
+  Convelio ships a genuine test/live split. A dedicated sandbox host mirrors the
+  production API, and the API key itself selects the environment: a test key works only
+  against the sandbox server and a live key only against production, so a credential
+  cannot be pointed at the wrong environment by accident. What Convelio does NOT publish
+  is any of the layer above that — no shared demo credentials, no magic test values that
+  force a particular quote outcome, no fixture or trigger tooling to fire a webhook on
+  demand, and no time simulation. Test access still requires an emailed key.
+environments:
+- mode: test
+  server: https://api.sandbox.convelio.com/v2
+  description: Sandbox
+  key_prefix: sk_test_
+  isolation: >-
+    "You can use the Convelio API in sandbox mode, which does not affect your live data
+    or interact with the live api."
+- mode: live
+  server: https://api.convelio.com/v2
+  description: Production
+  key_prefix: sk_live_
+key_scheme:
+  type: Secret
+  prefix: sk
+  selection: >-
+    "The API key you use to authenticate the request determine whether the request is
+    live mode or sandbox mode." A test key cannot be used on the production server and a
+    live key cannot be used on the sandbox server.
+  published_example_form:
+  - 'Secret / Test: sk_test_<25 characters>'
+  - 'Secret / Live: sk_live_<25 characters>'
+  example_note: >-
+    Convelio's documentation table shows the shape only, with the body of the key
+    rendered as a run of zeros. No usable value is published, and none is recorded here.
+access:
+  self_service: false
+  how_to_obtain: >-
+    Email api@convelio.com. There is no signup flow that mints a sandbox key, so even
+    the test environment is gated on a Convelio human — a developer cannot evaluate the
+    API unattended.
+  signup: https://web.convelio.com/auth/signup-email
+test_data:
+  magic_values: []
+  test_addresses: []
+  test_items: []
+  note: >-
+    No published test fixtures. The quote engine's interesting branch — a `processing`
+    quote status, returned when Convelio cannot price instantly because of geography,
+    oversized items, or high commercial value, and resolved by an operations team within
+    24 hours — has no documented way to be forced in sandbox. Neither does the
+    `custom_quote_ready` webhook that follows it.
+time_simulation:
+  supported: false
+fixture_tooling:
+  cli: null
+  event_triggers: null
+  note: >-
+    Webhooks can be registered in sandbox via POST /webhook, but no trigger/replay
+    endpoint or CLI forwarder is documented, so a subscriber cannot fire a test delivery
+    on demand.
+gaps:
+- No self-service sandbox key — evaluation requires an email round-trip.
+- No magic test values to force quote states (created vs processing) or shipment statuses.
+- No webhook trigger/replay tooling for the five declared events.
+- No test clock / time simulation.

@@ -42,5 +42,37 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Convelio is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Convelio is a Paris- and London-based tech-enabled fine art logistics company that moves
+high-value, fragile and oversized objects — paintings, sculpture, antiques and design —
+for galleries, auction houses, art fairs, dealers, collectors and online marketplaces.
+Its differentiator is an instant-pricing engine that returns an all-inclusive
+door-to-door shipping price (packing, crating, customs, road/air/sea freight, insurance
+and white-glove delivery) in place of the multi-day manual quoting the art-handling
+trade traditionally runs on.
+
+## API surface
+
+Convelio exposes that engine as the **Convelio Public API** — a REST Shipping API (v2.0)
+documented with OpenAPI 3.1 at [developers.convelio.com](https://developers.convelio.com/) —
+plus an embeddable checkout widget, a web dashboard and a public tracking surface.
+
+- **Production** `https://api.convelio.com/v2` · **Sandbox** `https://api.sandbox.convelio.com/v2`
+- 6 paths / 9 operations: estimate a price, create and read a quote, create an order, and
+  manage webhook subscriptions.
+- 5 events declared in the OpenAPI 3.1 `webhooks` block — `custom_quote_ready`,
+  `quote_paid`, `order_created`, `shipment_status_changed`, `document_ready` — delivered
+  over HTTP POST and signed with an HMAC-SHA256 `X-Convelio-signature` header.
+- Authentication is a single secret API key (`Authorization: token <key>`) whose
+  `sk_test_` / `sk_live_` prefix selects the environment. Keys are issued by emailing
+  api@convelio.com; there is no self-service provisioning.
+
+Convelio serves no standalone `/openapi.json` — the specification captured in `openapi/`
+was read from the server-rendered Redoc payload the developer portal itself publishes.
+
+## Links
+
+- Website — <https://www.convelio.com/>
+- Developer portal / API reference — <https://developers.convelio.com/>
+- API status — <https://developers.convelio.com/status>
+- Help centre — <https://help.convelio.com/en>
+- API & Widget overview — <https://www.convelio.com/en/convelio-api/>

@@ -1,0 +1,67 @@
+generated: '2026-08-09'
+method: searched
+source: https://developers.convelio.com/
+summary: >-
+  Convelio versions the Shipping API twice over — a /v2 URI prefix and a
+  `application/vnd.convelio-shipping.v2+json` vendor media type — and links a dedicated
+  API status page from the reference. Everything else in the lifecycle contract is
+  absent: no changelog, no release notes, no deprecation policy, no Sunset/Deprecation
+  header support, no published SLA or uptime target, and no roadmap. The document
+  itself opens with "This document describes the current version (2.0) of the Shipping
+  API", which implies at least one earlier version existed, but v1 is not archived or
+  referenced anywhere public.
+versioning:
+  scheme: uri-path + vendor-media-type
+  current: '2.0'
+  uri_prefix: /v2
+  media_type: application/vnd.convelio-shipping.v2+json
+  docs: https://developers.convelio.com/
+  prior_versions_published: false
+  note: >-
+    Both servers[] entries carry the /v2 path, so the version is baked into the base
+    URL as well as being negotiable through Content-Type.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  deprecated_operations: []
+  note: >-
+    No operation, parameter, or schema in the OpenAPI 3.1 document carries
+    `deprecated: true`, and no RFC 8594 Sunset / Deprecation header contract is
+    documented. A partner integrating today has no published notice period.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+  note: >-
+    No SLA, uptime commitment, or support-response target is published on the developer
+    portal or the marketing site. Instant-quote latency is marketed ("in just 1
+    millisecond", "1.57 min average time") but not committed to contractually.
+status_page:
+  url: https://developers.convelio.com/status
+  title: Convelio API Status
+  http_status: 200
+  first_party: true
+  linked_from: >-
+    The `api-status-page` tag inside the OpenAPI document itself, grouped under
+    "Resources" via x-tagGroups.
+  note: >-
+    Hosted on Convelio's own developer subdomain rather than a third-party status
+    provider. status.convelio.com does not resolve.
+changelog:
+  url: null
+  published: false
+  probed:
+  - {url: 'https://developers.convelio.com/changelog', status: 404}
+  note: >-
+    No dated changelog or release-notes surface was found on developers.convelio.com,
+    www.convelio.com, or help.convelio.com. Version history is not recoverable from the
+    public surface.
+roadmap:
+  url: null
+  published: false
+support:
+  help_center: https://help.convelio.com/en
+  api_contact: api@convelio.com
+  operations_contact: order@convelio.com

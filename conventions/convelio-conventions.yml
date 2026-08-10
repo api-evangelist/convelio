@@ -1,0 +1,110 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/convelio-shipping-openapi.yml
+docs: https://developers.convelio.com/
+summary: >-
+  Convelio describes the Shipping API as "organized around REST … predictable
+  resource-oriented urls, accept and return json-encoded requests and responses … also
+  use standard HTTP response codes, authentication, and verbs." In practice the
+  cross-cutting contract is thin: a single header credential, URI-path plus vendor
+  media-type versioning, an RFC 7807-shaped error envelope, and HMAC-signed webhooks.
+  There is no idempotency contract, no pagination, no request-id tracing, and no
+  rate-limit signalling anywhere in the published surface.
+authentication:
+  style: apiKey in header
+  header: Authorization
+  format: token <secret_key>
+  see: authentication/convelio-authentication.yml
+content_negotiation:
+  request_content_type:
+    header: Content-Type
+    accepted: [application/json, application/vnd.convelio-shipping.v2+json]
+    default: application/json
+    note: >-
+      Convelio's parameter description asks callers to send
+      `application/vnd.convelio-shipping.v2+json` — a vendor media type that pins the
+      API major version at the representation level, in addition to the /v2 URI prefix.
+  accept:
+    header: Accept
+    accepted: ['*/*', application/json]
+    default: application/json
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) parameter, header, or request-body field appears
+    anywhere in the OpenAPI 3.1 document, and the developer documentation does not
+    describe retry-safety. This matters here: createShippingQuote and
+    createShippingOrder are non-idempotent POSTs that create billable commercial
+    records, so a client that retries on a timeout risks duplicate quotes and duplicate
+    orders with no server-side dedupe.
+  recommendation: >-
+    A provider-side gap. An Idempotency-Key header scoped per API key on POST
+    /shipping/quote and POST /shipping/order would close it.
+pagination:
+  supported: false
+  evidence: >-
+    The only collection endpoint, GET /webhook (listWebhooks), returns an unbounded
+    array with no limit/offset/cursor parameters and no envelope carrying a
+    next/total. There is no list endpoint for quotes or orders at all.
+filtering_and_expansion:
+  field_expansion: false
+  sparse_fieldsets: false
+  filtering: false
+  note: The only query parameter in the whole API is `currency`.
+currency:
+  parameter: currency
+  in: query
+  accepted: [EUR, USD, GBP]
+  amounts: >-
+    All monetary amounts are positive integers in the smallest currency unit (100 = 1.00
+    EUR). Prices are returned as both vat_excluded_amount and vat_included_amount.
+units_and_measurement:
+  measurement_system: >-
+    The item schema carries a measurement_system discriminator, so dimensions and
+    weights are expressed in either metric or imperial per request rather than
+    normalized server-side.
+  country_codes: ISO 3166-1 alpha-2
+request_tracing:
+  request_id_header: null
+  correlation: >-
+    No request-id or trace header is documented on requests or responses, so a client
+    has no correlation handle to quote when reporting a failed call to
+    api@convelio.com.
+versioning:
+  scheme: uri-path + vendor media type
+  current: v2
+  uri: /v2
+  media_type: application/vnd.convelio-shipping.v2+json
+  see: lifecycle/convelio-lifecycle.yml
+errors:
+  envelope: RFC 7807 problem details shape (type/title/status/detail), served as application/json
+  validation: 422 carries a validation_messages map keyed by field name
+  see: errors/convelio-problem-types.yml
+rate_limiting:
+  documented: false
+  headers: null
+  note: >-
+    No rate limits, quotas, burst policy, or 429 response are documented or declared on
+    any operation. Absence of a published limit is not absence of a limit — it means a
+    client cannot plan for one.
+webhooks:
+  transport: HTTP POST to a subscriber-registered URL
+  registration: self-service via the API (createWebhook / listWebhooks / updateWebhook / deleteWebhook)
+  signature:
+    header: X-Convelio-signature
+    algorithm: HMAC-SHA256 over the request body, keyed with the account API secret token
+  expected_response: 204 No Content
+  retries: not documented
+  see: asyncapi/convelio-webhooks.yml
+environments:
+  selection: by API key prefix, not by parameter
+  sandbox: https://api.sandbox.convelio.com/v2
+  production: https://api.convelio.com/v2
+  see: sandbox/convelio-sandbox.yml
+cross_links:
+  authentication: authentication/convelio-authentication.yml
+  errors: errors/convelio-problem-types.yml
+  lifecycle: lifecycle/convelio-lifecycle.yml
+  sandbox: sandbox/convelio-sandbox.yml
+  webhooks: asyncapi/convelio-webhooks.yml

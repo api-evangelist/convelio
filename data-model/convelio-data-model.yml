@@ -1,0 +1,103 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/convelio-shipping-openapi.yml
+summary: >-
+  The Convelio data model is a two-object commercial spine — Quote then Order — hanging
+  off a shared shipment description. A shipment is expressed as one or more Pickups
+  (each an address, contacts and the Items collected there) travelling to a single
+  Delivery. Both Quote and Order embed that same shipment description plus a Price;
+  Order additionally carries BillingDetails and is created from a quote_id, which is the
+  only id-reference relationship in the whole API. There is no customer, account, user,
+  invoice or document entity — the model stops at the shipment.
+root_entities:
+- name: quote
+  created_by: createShippingQuote
+  read_by: getShippingQuote
+  identifier: {field: id, type: string, format: uuid}
+  status_field: status
+  statuses:
+  - {value: created, meaning: 'The API successfully returned an instant shipping price and the quote has been created in Convelio''s system'}
+  - {value: processing, meaning: 'The API could not return an instant shipping price (geography, over-sized item, high commercial value) and Convelio''s Operational team is working on providing a Custom Quote within 24h'}
+- name: order
+  created_by: createShippingOrder
+  read_by: null
+  identifier: {field: id, type: string, format: uuid}
+  note: >-
+    Write-only from the API's point of view — there is no getOrder / listOrders
+    operation. Once created, an order is observable only through the
+    shipment_status_changed and document_ready webhooks and the web dashboard.
+- name: webhook
+  created_by: createWebhook
+  read_by: [getWebhook, listWebhooks]
+  identifier: {field: id, type: string, format: uuid}
+entities:
+- {name: quote, kind: root, tag: shipping}
+- {name: order, kind: root, tag: shipping}
+- {name: webhook, kind: root, tag: webhook}
+- {name: shipment-estimation, kind: request, tag: shipping}
+- {name: pickup, kind: embedded}
+- {name: delivery, kind: embedded}
+- {name: item, kind: embedded}
+- {name: multi-part-item, kind: embedded}
+- {name: part, kind: embedded}
+- {name: address, kind: value}
+- {name: contact, kind: value}
+- {name: phone, kind: value}
+- {name: price, kind: value}
+- {name: commercial-value, kind: value}
+- {name: dimension, kind: value}
+- {name: billing-details, kind: value}
+- {name: contract-insurance, kind: value}
+- {name: direct-label-request, kind: value}
+- {name: desired-packing, kind: value}
+relationships:
+- {from: order, to: quote, type: belongs_to, via: quote_id, required: true, note: 'the single id-reference in the API — an order is always created from an existing quote'}
+- {from: quote, to: pickup, type: has_many, via: pickups}
+- {from: quote, to: delivery, type: has_one, via: delivery}
+- {from: quote, to: price, type: has_one, via: price}
+- {from: quote, to: quote-status, type: has_one, via: status}
+- {from: quote, to: shipping-speed, type: has_one, via: shipping_speed}
+- {from: quote, to: contract-insurance, type: has_one, via: contract_insurance}
+- {from: quote, to: direct-label-request, type: has_one, via: direct_label_request}
+- {from: order, to: pickup, type: has_many, via: pickups}
+- {from: order, to: delivery, type: has_one, via: delivery}
+- {from: order, to: price, type: has_one, via: price}
+- {from: order, to: billing-details, type: has_one, via: billing_details}
+- {from: order, to: contract-insurance, type: has_one, via: contract_insurance}
+- {from: pickup, to: address, type: has_one, via: address, required: true}
+- {from: pickup, to: contact, type: has_many, via: contacts}
+- {from: pickup, to: item, type: has_many, via: items, required: true}
+- {from: delivery, to: address, type: has_one, via: address, required: true}
+- {from: delivery, to: contact, type: has_one, via: contact}
+- {from: delivery, to: delivery-type, type: has_one, via: type, required: true}
+- {from: item, to: commercial-value, type: has_one, via: value, required: true}
+- {from: item, to: packing-type, type: has_one, via: current_packing, required: true}
+- {from: item, to: desired-packing, type: has_one, via: desired_packing}
+- {from: item, to: item-type, type: has_one, via: type}
+- {from: item, to: item-materials, type: has_one, via: materials}
+- {from: item, to: measurement-system, type: has_one, via: measurement_system}
+- {from: multi-part-item, to: part, type: has_many, via: parts}
+- {from: contact, to: phone, type: has_one, via: phone, required: true}
+- {from: contact, to: phone, type: has_many, via: additional_phones}
+- {from: billing-details, to: address, type: has_one, via: address, required: true}
+- {from: billing-details, to: phone, type: has_one, via: phone, required: true}
+- {from: address, to: country-code, type: has_one, via: country_code, required: true}
+- {from: commercial-value, to: currency-code, type: has_one, via: currency_code, required: true}
+- {from: shipment-estimation, to: pickup, type: has_many, via: pickups}
+- {from: shipment-estimation, to: delivery, type: has_one, via: delivery, required: true}
+enumerations:
+- {name: quote-status, values: [created, processing]}
+- {name: shipment-status, values: [shipment_created, picked_up, packing_in_progress, export_in_progress, freight_in_transit, import_in_progress, out_for_delivery, shipment_completed, on_hold, canceled]}
+- {name: triggering-event-name, values: [custom_quote_ready, quote_paid, order_created, shipment_status_changed, document_ready]}
+- {name: currency-code, values: [EUR, USD, GBP]}
+identifiers:
+  scheme: UUID v4, no type prefix
+  note: >-
+    Unlike prefix-encoded id schemes (Stripe's `cus_`/`ch_`), Convelio ids are bare
+    UUIDs, so an id string carries no type information — quote_id and order_id are
+    indistinguishable by inspection.
+gaps:
+- No customer/account entity — the API is scoped entirely by the API key.
+- No read path for orders (no getOrder, no listOrders) and no list path for quotes.
+- No document entity, despite a document_ready webhook that announces one.
+- Shipment status lives only on webhook payloads; it is not readable on any resource.

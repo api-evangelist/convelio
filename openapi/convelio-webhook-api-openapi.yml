@@ -1,0 +1,694 @@
+openapi: 3.1.0
+info:
+  title: Convelio Public Webhook API
+  version: '2.0'
+  contact:
+    name: Convelio API Team
+    email: api@convelio.com
+    url: https://www.convelio.com
+  termsOfService: https://www.convelio.com/fr/termes/
+  license:
+    name: MIT
+    url: https://www.convelio.com/fr/termes/
+  description: '**This document describes the current version (2.0) of the Shipping API.**
+
+
+    The Convelio API is organized around REST. Our API has predictable resource-oriented urls, accept and return json-encoded requests and
+
+    responses. It also use standard HTTP response codes, authentication, and verbs.
+
+
+    You can use the Convelio API in sandbox mode, which does not affect your live data or interact with the live api.
+
+    The API key you use to authenticate the request determine whether the request is live mode or sandbox mode.
+
+
+    # API key
+
+    Convelio authenticates your API requests using your account’s API key. If you do not include your key when making an API request,
+
+    or use one that is incorrect, Convelio returns an error.
+
+
+    Your API key has a *Secret* type, prefixed by *sk*, and should be kept confidential and only stored on your own servers.
+
+    Your account’s secret API key can perform any API request to Convelio without restriction.
+
+
+    There are also two **modes** for your API key: *live* and *test*.
+
+    - *live* key can only be used on our production server.
+
+    - *test* key can only be used on our sandbox server.
+
+
+    <b>Example of key by modes</b>
+
+
+    | **Type** \\ **Mode** | Test                              | Live                              |
+
+    |---------------------|-----------------------------------|-----------------------------------|
+
+    | Secret              | REDACTED_STRIPE_KEY | REDACTED_STRIPE_KEY |
+
+
+    <b>Obtaining your API key</b>
+
+
+    To get your API key, please send your request at api@convelio.com.'
+  x-logo:
+    url: public/assets/icons/convelio-black-spaced.svg
+    altText: Convelio logo
+servers:
+- url: https://api.sandbox.convelio.com/v2
+  description: Sandbox
+- url: https://api.convelio.com/v2
+  description: Production
+security:
+- secret_token: []
+tags:
+- name: webhook
+  x-displayName: Webhook API
+  description: 'The Webhook API allows an API partner to create and manage webhooks.
+
+    '
+paths:
+  /webhook:
+    parameters:
+    - $ref: '#/components/parameters/json-content-type'
+    - $ref: '#/components/parameters/accept'
+    get:
+      summary: List registered webhooks
+      description: List all webhooks.
+      operationId: listWebhooks
+      tags:
+      - webhook
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/webhook'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    post:
+      summary: Create webhook
+      description: 'Create a webhook.
+
+        <h3> Deliveries: </h3>
+
+        To acknowledge receipt of a webhook delivery, return a <i>204</i> OK response with an empty body.
+
+        To send a negative acknowledgment for the message, return any other status code.
+
+        Webhook deliveries are signed with the API secret token. HTTP header name: <i>X-Convelio-signature</i>
+
+        <h3> Retry policy: </h3>
+
+        If a webhook delivery fails, Convelio will retry the delivery for up to 7 days. Retry attempts will start after 60 seconds and will increase exponentially.'
+      operationId: createWebhook
+      tags:
+      - webhook
+      requestBody:
+        $ref: '#/components/requestBodies/webhook'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/unprocessable-entity'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+  /webhook/{webhookId}:
+    parameters:
+    - $ref: '#/components/parameters/webhook-id'
+    - $ref: '#/components/parameters/json-content-type'
+    - $ref: '#/components/parameters/accept'
+    get:
+      summary: Get webhook
+      description: Get a webhook.
+      operationId: getWebhook
+      tags:
+      - webhook
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    put:
+      summary: Update webhook
+      description: Update a webhook.
+      operationId: updateWebhook
+      tags:
+      - webhook
+      requestBody:
+        $ref: '#/components/requestBodies/webhook-update'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '422':
+          $ref: '#/components/responses/unprocessable-entity'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+    delete:
+      summary: Delete webhook
+      description: Delete a webhook.
+      operationId: deleteWebhook
+      tags:
+      - webhook
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not-found'
+        '500':
+          $ref: '#/components/responses/internal-server-error'
+webhooks:
+  custom-quote-ready:
+    post:
+      summary: Custom Quote Ready Event
+      description: Sent when a price is available for a custom quote.
+      operationId: customQuoteReadyEvent
+      tags:
+      - webhook
+      security:
+      - convelio_signature: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/custom-quote-ready-event'
+      responses:
+        '204':
+          description: Sent from your server when it accepts the callback.
+  quote-paid:
+    post:
+      summary: Quote Paid Event
+      description: Sent when a quote was paid
+      operationId: quotePaidEvent
+      tags:
+      - webhook
+      security:
+      - convelio_signature: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/quote-paid-event'
+      responses:
+        '204':
+          description: Sent from your server when it accepts the callback.
+  order-created:
+    post:
+      summary: Order Created Event
+      description: Sent when an order is created through the API.
+      operationId: orderCreatedEvent
+      tags:
+      - webhook
+      security:
+      - convelio_signature: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/orde-created-event'
+      responses:
+        '204':
+          description: Sent from your server when it accepts the callback.
+  shipment-status-changed:
+    post:
+      summary: Shipment Status Changed Event
+      description: Sent when a new shipment status is published.
+      operationId: shipmentStatusChangedEvent
+      tags:
+      - webhook
+      security:
+      - convelio_signature: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/shipment-status-changed-event'
+      responses:
+        '204':
+          description: Sent from your server when it accepts the callback.
+  document-ready:
+    post:
+      summary: Document Ready Event
+      description: Sent when a new document is available.
+      operationId: documentReadyEvent
+      tags:
+      - webhook
+      security:
+      - convelio_signature: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/document-ready-event'
+      responses:
+        '204':
+          description: Sent from your server when it accepts the callback.
+components:
+  schemas:
+    orde-created-event:
+      title: OrderCreatedEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - order_created
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            quote_id:
+              type: string
+              description: The Quote ID.
+              format: uuid
+            order_id:
+              type: string
+              description: The Order ID.
+              format: uuid
+    custom-quote-ready-event:
+      title: CustomQuoteReadyEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - custom_quote_ready
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            quote_id:
+              type: string
+              description: The Quote ID.
+              format: uuid
+    http-error:
+      title: HttpError
+      x-tags:
+      - Error responses
+      description: 'The error model for the API follow the Content-Type **application/problem+json** defined by the [IETF RFC 7807](https://tools.ietf.org/html/rfc7807).
+
+
+        Description of the errors:
+
+        - Bad Request (400): The URL requested is not valid.
+
+        - Unauthorized (401): Token not found.
+
+        - Forbidden (403): You are authenticated but not allowed to execute the action.
+
+        - Not Found (404): Page not found.
+
+        - Unprocessable Entity (422): The server was unable to process the request.
+
+        - Internal Server Error (500): There is an internal problem on our server.
+
+        - Service Unavailable (503): The server is not ready to handle the request.
+
+        '
+      type: object
+      properties:
+        type:
+          type: string
+          example: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+          description: 'A URL to a page with more details regarding the problem.
+
+            The primary identifier for the problem.
+
+            It''s typically an absolute URL that leads to an HTML page containing human-readable documentation regarding the problem.'
+        title:
+          type: string
+          description: Short human-readable summary of the problem.
+          example: Forbidden
+        status:
+          type: integer
+          description: 'The HTTP status code.
+
+            It''s always the same as the status code in the HTTP header.
+
+            It''s only included for the convenience of the consumer.'
+          example: 403
+          minimum: 100
+        detail:
+          type: string
+          description: Human-readable description of this specific problem.
+          example: Forbidden
+      required:
+      - type
+      - title
+      - status
+      - detail
+    shipment-status:
+      title: ShipmentStatus
+      description: 'The shipment status of the tracked order. Possible values:
+
+        - shipment_created: The Order has been booked and our team is planning collection at the pickup location.
+
+        - picked_up: The items have been collected at the pickup location.
+
+        - packing_in_progress: The items are being packed at one of our crating center for more safety.
+
+        - export_in_progress: The shipment has left our crating center to be sent abroad.
+
+        - freight_in_transit: The shipment is on its way to the delivery location.
+
+        - import_in_progress: The shipment has arrived at country of destination.
+
+        - out_for_delivery: The shipment has arrived the destination facility and the carrier is about to deliver the shipment.
+
+        - shipment_completed: Home, sweet home! The shipment has been delivered to the delivery location.
+
+        - on_hold: The shipment has temporarily been paused.
+
+        - canceled: The shipment has been canceled for some reason.'
+      type: string
+      enum:
+      - shipment_created
+      - picked_up
+      - packing_in_progress
+      - export_in_progress
+      - freight_in_transit
+      - import_in_progress
+      - out_for_delivery
+      - shipment_completed
+      - on_hold
+      - canceled
+    document-ready-event:
+      title: DocumentReadyEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - document_ready
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            order_id:
+              type: string
+              description: The Order ID.
+              format: uuid
+            document_type:
+              type: string
+              description: The type of document.
+            dashboard_order_link:
+              type: string
+              description: Link to see the details of the shipping order.
+              format: uri
+    quote-paid-event:
+      title: QuotePaidEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - quote_paid
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            quote_id:
+              type: string
+              description: The Quote ID.
+              format: uuid
+            tracking_link:
+              type: string
+              description: Link to follow the progress of the shipping order.
+              format: uri
+              example: https://tracking.convelio.com/example
+    webhook-url:
+      title: WebhookUrl
+      description: URL to receive webhooks.
+      type: string
+      format: uri
+      pattern: ^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+      maxLength: 255
+      example: https://example.com/webhook
+    triggering-event-name:
+      title: TriggeringEventName
+      type: string
+      enum:
+      - custom_quote_ready
+      - quote_paid
+      - order_created
+      - shipment_status_changed
+      - document_ready
+    http-unprocessable-entity-error:
+      title: HttpUnprocessableEntityError
+      x-tags:
+      - Error responses
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/http-error'
+      - properties:
+          status:
+            example: 422
+          validation_messages:
+            type: object
+            description: Validation messages are only returned when your request have a body and the body is invalid.
+            properties:
+              '{field_name}':
+                type: object
+                description: 'The name of the field which is wrong in your request. Example: "delivery_type"'
+                properties:
+                  '{error_title}':
+                    type: string
+                    description: 'The title of the error. Example: "deliveryTypeInvalid"'
+                    example: 'Invalid delivery type. Valid values are: curbside, white_glove'
+            required:
+            - '{field_name}'
+    shipment-status-changed-event:
+      title: ShipmentStatusChangedEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - shipment_status_changed
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            order_id:
+              type: string
+              description: The Order ID.
+              format: uuid
+            status:
+              $ref: '#/components/schemas/shipment-status'
+    webhook-update:
+      title: RequestBodyUpdateWebhook
+      type: object
+      properties:
+        url:
+          $ref: '#/components/schemas/webhook-url'
+      required:
+      - url
+    webhook:
+      title: Webhook
+      x-tags:
+      - Models
+      type: object
+      description: A webhook (also called a web callback or HTTP push API) is a way for an app to provide other applications with real-time information.
+      properties:
+        id:
+          type: string
+          description: Identifier of the webhook
+          format: uuid
+          example: df35ed86-2151-437d-839e-ef650313a067
+          readOnly: true
+        url:
+          $ref: '#/components/schemas/webhook-url'
+        triggering_event_name:
+          $ref: '#/components/schemas/triggering-event-name'
+        creation_date:
+          type: string
+          format: date-time
+          example: '2020-01-01T00:00:00Z'
+          readOnly: true
+      required:
+      - url
+      - triggering_event_name
+  responses:
+    internal-server-error:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Internal Server Error
+            status: 500
+            detail: There is an internal problem on our server.
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Unauthorized
+            status: 401
+            detail: Token not found.
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Forbidden
+            status: 403
+            detail: You are authenticated but not allowed to execute the action.
+    unprocessable-entity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-unprocessable-entity-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Unprocessable Entity
+            status: 422
+            detail: The server was unable to process the request.
+            validation_messages:
+              '{field_name}':
+                '{error_title}': 'Invalid delivery type. Valid values are: curbside, white_glove'
+    not-found:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Not Found
+            status: 404
+            detail: Page not found.
+  parameters:
+    webhook-id:
+      name: webhookId
+      description: Webhook ID
+      in: path
+      schema:
+        type: string
+      required: true
+    json-content-type:
+      name: Content-Type
+      description: Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`
+      in: header
+      schema:
+        type: string
+        enum:
+        - application/json
+        - application/vnd.convelio-shipping.v2+json
+        default: application/json
+    accept:
+      description: Accept header should be sent and should be `application/json`
+      name: Accept
+      in: header
+      schema:
+        type: string
+        enum:
+        - '*/*'
+        - application/json
+        default: application/json
+  requestBodies:
+    webhook:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/webhook'
+    webhook-update:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook-update'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/webhook-update'
+  securitySchemes:
+    convelio_signature:
+      name: X-Convelio-signature
+      description: An HMAC SHA256 signature created with the body data and the API secret token.
+      in: header
+      type: apiKey
+    secret_token:
+      name: Authorization
+      type: apiKey
+      in: header
+      description: token <your_token_here>
+      x-convelio-example: token {{secret_token}}
+      x-convelio-sensitive: true
+x-tagGroups:
+- name: Endpoints
+  tags:
+  - shipping
+  - webhook
+- name: Schemas
+  tags:
+  - Error responses
+  - Models
+  - Enums
+- name: Resources
+  tags:
+  - api-status-page

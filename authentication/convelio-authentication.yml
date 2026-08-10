@@ -1,0 +1,68 @@
+generated: '2026-08-09'
+method: searched
+source: openapi/convelio-shipping-openapi.yml
+docs: https://developers.convelio.com/#section/API-key
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+  oauth2_flows: []
+  notes: >-
+    Convelio authenticates every Shipping API request with a single secret API key
+    presented in the Authorization header using the literal form `token <secret>`.
+    There is no OAuth 2.0, no OpenID Connect, and no scope surface — the key is
+    all-or-nothing. A second apiKey scheme, X-Convelio-signature, is not a request
+    credential at all: it is the HMAC-SHA256 signature Convelio attaches to OUTBOUND
+    webhook deliveries so the receiver can verify them.
+schemes:
+- name: secret_token
+  type: apiKey
+  in: header
+  parameter: Authorization
+  format: token <secret_key>
+  description: >-
+    Account secret API key. Prefixed `sk`. Convelio documents it as a Secret-type key
+    that "should be kept confidential and only stored on your own servers" and that
+    "can perform any API request to Convelio without restriction" — there is no
+    restricted/publishable key tier and no per-scope narrowing.
+  applied_to: all documented operations (declared as the document-level default security)
+  sources:
+  - openapi/convelio-shipping-openapi.yml
+- name: convelio_signature
+  type: apiKey
+  in: header
+  parameter: X-Convelio-signature
+  direction: inbound-to-subscriber
+  description: >-
+    HMAC-SHA256 signature computed over the webhook body with the account's API secret
+    token. Present on webhook callbacks Convelio POSTs to a subscriber URL, for
+    verification by the receiver — not sent by clients on API requests.
+  sources:
+  - openapi/convelio-shipping-openapi.yml
+key_modes:
+  scheme: prefix-encoded mode selection
+  description: >-
+    The key itself, not a separate parameter, selects the environment. A test key only
+    works against the sandbox server; a live key only works against production.
+  keys:
+  - mode: test
+    prefix: sk_test_
+    server: https://api.sandbox.convelio.com/v2
+  - mode: live
+    prefix: sk_live_
+    server: https://api.convelio.com/v2
+provisioning:
+  self_service: false
+  method: email request
+  contact: api@convelio.com
+  note: >-
+    Keys are not self-service. Convelio's documentation states "To get your API key,
+    please send your request at api@convelio.com." There is no developer console that
+    mints a key, so the credential path is gated on a human at Convelio.
+gaps:
+- No OAuth 2.0 / OpenID Connect surface; no delegated or third-party authorization.
+- No scoped or restricted keys — a single secret key grants the full API surface.
+- No documented key rotation, expiry, or revocation procedure.
+- No self-service key issuance; provisioning is an email round-trip.
+- No mTLS, no proof-of-possession, no request signing on inbound requests.

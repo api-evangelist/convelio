@@ -1,0 +1,125 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/convelio-shipping-openapi.yml
+docs: https://developers.convelio.com/#tag/webhook
+spec_type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Convelio publishes NO AsyncAPI document. It does, however, do something better than
+  most webhook providers in the catalog: it declares its five events in the OpenAPI
+  3.1.0 top-level `webhooks` object with a typed request-body schema per event, so the
+  event surface IS machine-readable — it just is not expressed in AsyncAPI. This
+  artifact catalogues that surface as-declared. Nothing here is invented; every event
+  name, payload field and enum below is lifted from the published spec.
+subscription:
+  model: self-service via the REST API
+  operations:
+  - {operationId: listWebhooks, method: GET, path: /webhook, summary: List registered webhooks}
+  - {operationId: createWebhook, method: POST, path: /webhook, summary: Create webhook}
+  - {operationId: getWebhook, method: GET, path: '/webhook/{webhookId}', summary: Get webhook}
+  - {operationId: updateWebhook, method: PUT, path: '/webhook/{webhookId}', summary: Update webhook}
+  - {operationId: deleteWebhook, method: DELETE, path: '/webhook/{webhookId}', summary: Delete webhook}
+  registration_shape:
+    schema: webhook
+    fields:
+    - {name: id, type: string, format: uuid, readOnly: true}
+    - {name: url, type: string, required: true, description: subscriber endpoint Convelio POSTs to}
+    - {name: triggering_event_name, type: enum, required: true}
+    - {name: creation_date, type: string, format: date-time, readOnly: true}
+  one_event_per_subscription: true
+  note: >-
+    A webhook registration binds exactly one triggering_event_name, so a partner wanting
+    all five events registers five webhooks.
+delivery:
+  transport: HTTP POST
+  content_type: application/json
+  expected_response: 204 No Content
+  signature:
+    header: X-Convelio-signature
+    algorithm: HMAC-SHA256
+    signed_over: the request body
+    key: the account's API secret token
+    scheme_name: convelio_signature
+  retries: not documented
+  ordering: not documented
+  replay: not documented
+envelope:
+  fields:
+  - {name: event, type: string, description: the event name, constrained by enum on each event schema}
+  - {name: created, type: string, format: date-time}
+  - {name: payload, type: object, description: event-specific body}
+events:
+- name: custom_quote_ready
+  channel: custom-quote-ready
+  operationId: customQuoteReadyEvent
+  summary: Custom Quote Ready Event
+  description: Sent when a price is available for a custom quote.
+  schema: custom-quote-ready-event
+  payload:
+  - {field: quote_id, type: string, format: uuid, description: The Quote ID}
+  significance: >-
+    This is the event that closes the loop on the API's most important asynchronous
+    branch. createShippingQuote can return a quote in status `processing` when Convelio
+    cannot price instantly (geography, oversized item, high commercial value); the
+    operations team produces a custom quote within 24h and this event announces it.
+- name: quote_paid
+  channel: quote-paid
+  operationId: quotePaidEvent
+  summary: Quote Paid Event
+  description: Sent when a quote was paid.
+  schema: quote-paid-event
+  payload:
+  - {field: quote_id, type: string, format: uuid, description: The Quote ID}
+  - {field: tracking_link, type: string, description: Link to follow the progress of the shipping order}
+- name: order_created
+  channel: order-created
+  operationId: orderCreatedEvent
+  summary: Order Created Event
+  description: Sent when an order is created through the API.
+  schema: orde-created-event
+  payload:
+  - {field: quote_id, type: string, format: uuid, description: The Quote ID}
+  - {field: order_id, type: string, format: uuid, description: The Order ID}
+  note: >-
+    The backing component schema is named `orde-created-event` in the published
+    document — a typo Convelio ships. Recorded verbatim, not corrected.
+- name: shipment_status_changed
+  channel: shipment-status-changed
+  operationId: shipmentStatusChangedEvent
+  summary: Shipment Status Changed Event
+  description: Sent when a new shipment status is published.
+  schema: shipment-status-changed-event
+  payload:
+  - {field: order_id, type: string, format: uuid, description: The Order ID}
+  - {field: status, type: enum, ref: shipment-status}
+  status_values:
+  - {value: shipment_created, meaning: The Order has been booked and our team is planning collection at the pickup location}
+  - {value: picked_up, meaning: The items have been collected at the pickup location}
+  - {value: packing_in_progress, meaning: The items are being packed at one of our crating centers}
+  - {value: export_in_progress, meaning: The shipment has left our crating center to be sent abroad}
+  - {value: freight_in_transit, meaning: The shipment is on its way to the delivery location}
+  - {value: import_in_progress, meaning: The shipment has arrived at country of destination}
+  - {value: out_for_delivery, meaning: The carrier is about to deliver the shipment}
+  - {value: shipment_completed, meaning: The shipment has been delivered to the delivery location}
+  - {value: on_hold, meaning: The shipment has temporarily been paused}
+  - {value: canceled, meaning: The shipment has been canceled}
+- name: document_ready
+  channel: document-ready
+  operationId: documentReadyEvent
+  summary: Document Ready Event
+  description: Sent when a new document is available.
+  schema: document-ready-event
+  payload:
+  - {field: order_id, type: string, format: uuid, description: The Order ID}
+  - {field: document_type, type: string, description: The type of document}
+  - {field: dashboard_order_link, type: string, description: link to the order in the Convelio dashboard}
+coverage:
+  events_declared: 5
+  events_with_typed_schema: 5
+  subscription_operations: 5
+gaps:
+- No AsyncAPI document — the event surface is discoverable only by reading the OpenAPI webhooks block.
+- No documented retry policy, backoff, or delivery guarantee.
+- No replay/redelivery endpoint and no delivery-log surface.
+- No signature-verification worked example or signing-secret rotation procedure.
+- No event catalogue page in the help centre; the spec is the only description.

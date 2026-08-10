@@ -1,0 +1,19 @@
+{
+  "provider": "convelio",
+  "sources": [
+    "convelio-shipping-openapi.yml"
+  ],
+  "outputs": [
+    "convelio-shipping-api-openapi.yml",
+    "convelio-webhook-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/convelio-shipping-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "apis.yml register: written (+2 apis, 2 total)"
+  ],
+  "skipped": []
+}

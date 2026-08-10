@@ -1,0 +1,40 @@
+generated: '2026-08-09'
+method: searched
+source: npm registry search, PyPI, RubyGems, Packagist, github.com/convelio
+summary: >-
+  Convelio ships NO first-party client libraries. The public GitHub organization
+  github.com/convelio exists but has zero public repositories, and the developer
+  portal at developers.convelio.com offers no SDK downloads or code samples in any
+  language — only the OpenAPI reference. The one package on any registry carrying the
+  Convelio name is a community project by an unaffiliated author, last published in
+  2019 and unmaintained since. Consumers integrate against raw HTTP or generate a
+  client from the OpenAPI 3.1 document themselves.
+official_sdk_count: 0
+packages:
+- language: javascript
+  registry: npm
+  name: convelio
+  version: 0.0.6
+  url: https://www.npmjs.com/package/convelio
+  install: npm install convelio
+  repository: https://github.com/montmirail/convelio
+  official: false
+  maintainer: montmirail (pejoessel@gmail.com)
+  published: '2019-10-26'
+  last_modified: '2022-04-27'
+  note: >-
+    Community/third-party. Not published under a Convelio-owned npm scope or account,
+    not linked from Convelio's documentation, and predates the v2.0 API documented at
+    developers.convelio.com. Recorded for completeness; do not treat as a supported SDK.
+registries_checked:
+- {registry: npm, query: convelio, results: 1, official: 0}
+- {registry: pypi, query: convelio, status: 404, official: 0}
+- {registry: rubygems, query: convelio, results: 0, official: 0}
+- {registry: packagist, query: convelio, results: 0, official: 0}
+- {registry: github, org: convelio, public_repos: 0, official: 0}
+generate_your_own:
+  from: openapi/convelio-shipping-openapi.yml
+  note: >-
+    The published OpenAPI 3.1.0 document is complete enough (6 paths, 9 operations, 43
+    component schemas, declared securitySchemes) to generate a usable client with
+    openapi-generator or similar.

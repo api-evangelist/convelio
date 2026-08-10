@@ -1,0 +1,94 @@
+generated: '2026-08-09'
+method: derived
+status: candidate
+source: openapi/convelio-shipping-openapi.yml
+searched:
+  result: none
+  note: >-
+    No official or community Model Context Protocol server for Convelio was found.
+    Searched the developer portal (developers.convelio.com), the help centre, the
+    marketing site, the npm registry, and the public GitHub organization
+    github.com/convelio (which has zero public repositories). No mcp.convelio.com host
+    resolves, and no /.well-known/ discovery document is served on any Convelio host.
+  probed:
+  - {url: 'https://api.convelio.com/.well-known/ai-plugin.json', status: 404}
+  - {url: 'https://developers.convelio.com/.well-known/ai-plugin.json', status: 404}
+  - {url: 'https://developers.convelio.com/llms.txt', status: 404}
+  - {url: 'https://www.convelio.com/llms.txt', status: 404}
+server:
+  published: false
+  name: null
+  url: null
+  transport: null
+candidate_note: >-
+  CONVELIO DOES NOT OPERATE AN MCP SERVER. The tools below are a DERIVED candidate
+  surface — one tool per real operationId in the published OpenAPI 3.1 document, kept so
+  that anyone (Convelio included) can see what a faithful MCP projection of this API
+  would look like. No apis.yml MCPServer pointer is wired for this file, because
+  wiring one would assert an agent surface Convelio has not published.
+tools:
+- name: estimate_shipping_price
+  description: Obtain a first price estimation for a fine art shipment, without creating a quote.
+  source_operation: openapi/convelio-shipping-openapi.yml#estimateShippingPrice
+  method: POST
+  path: /shipping/estimate/price
+  action_class: read
+- name: create_shipping_quote
+  description: Request a quote. Returns status `created` with an instant price, or `processing` when Convelio's operations team must price it manually within 24h.
+  source_operation: openapi/convelio-shipping-openapi.yml#createShippingQuote
+  method: POST
+  path: /shipping/quote
+  action_class: write
+  consequence: creates a commercial record
+- name: get_shipping_quote
+  description: Retrieve a quote by id, including its status and price.
+  source_operation: openapi/convelio-shipping-openapi.yml#getShippingQuote
+  method: GET
+  path: /shipping/quote/{quoteId}
+  action_class: read
+- name: create_shipping_order
+  description: Book a shipment by converting an existing quote into an order, with billing details.
+  source_operation: openapi/convelio-shipping-openapi.yml#createShippingOrder
+  method: POST
+  path: /shipping/order
+  action_class: write
+  consequence: financial — books and bills a physical shipment; not idempotent
+- name: list_webhooks
+  description: List the webhooks registered for this account.
+  source_operation: openapi/convelio-shipping-openapi.yml#listWebhooks
+  method: GET
+  path: /webhook
+  action_class: read
+- name: create_webhook
+  description: Register a subscriber URL for one triggering event.
+  source_operation: openapi/convelio-shipping-openapi.yml#createWebhook
+  method: POST
+  path: /webhook
+  action_class: write
+- name: get_webhook
+  description: Retrieve a registered webhook by id.
+  source_operation: openapi/convelio-shipping-openapi.yml#getWebhook
+  method: GET
+  path: /webhook/{webhookId}
+  action_class: read
+- name: update_webhook
+  description: Update a registered webhook's URL or triggering event.
+  source_operation: openapi/convelio-shipping-openapi.yml#updateWebhook
+  method: PUT
+  path: /webhook/{webhookId}
+  action_class: write
+- name: delete_webhook
+  description: Delete a registered webhook.
+  source_operation: openapi/convelio-shipping-openapi.yml#deleteWebhook
+  method: DELETE
+  path: /webhook/{webhookId}
+  action_class: write
+agent_readiness_notes:
+- >-
+  The blocking issue for any agent surface here is not the tool list — the OpenAPI is
+  clean enough to project mechanically — it is that create_shipping_order is a
+  non-idempotent POST that books a physical, billable shipment. Without an
+  Idempotency-Key contract, a retrying agent can double-book a fine art shipment.
+- >-
+  Credentials are not self-service: an agent operator must email api@convelio.com for a
+  key, and that key is unscoped and can perform any request without restriction.

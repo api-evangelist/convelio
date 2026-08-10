@@ -1,0 +1,65 @@
+generated: '2026-08-09'
+method: searched
+source: https://www.convelio.com/en/convelio-api/
+summary: >-
+  Convelio's second integration surface, alongside the REST API, is a hosted embeddable
+  Shipping Widget that a gallery, dealer, marketplace or fair drops into its own site so
+  a buyer can price and book fine art delivery without leaving the listing. It is a
+  partner-configured product rather than a developer library: there is no published
+  loader script, no npm package, no element tag, and no widget reference in the
+  developer portal. Third-party platforms (Artlogic is the documented example) expose it
+  as a toggle in their own admin, which means the widget's configuration contract is
+  documented by Convelio's integration partners rather than by Convelio.
+components:
+- name: Convelio Shipping Widget
+  family: hosted embeddable checkout
+  url: https://www.convelio.com/en/convelio-api/
+  description: >-
+    Customizable embeddable quoting-and-booking surface for e-commerce product pages,
+    online viewing rooms and virtual fair booths. The buyer enters a delivery address
+    and selects shipping options; Convelio returns an all-inclusive price and the quote
+    is emailed to them.
+  capabilities:
+  - instant all-inclusive shipping quote on the merchant's own page
+  - three shipping speeds (regular, express, express+)
+  - insurance option
+  - white-glove delivery option
+  - quote delivered to the buyer by email
+  configuration:
+    required: main shipping address and the contact details of the person responsible for shipping requests
+    surface: configured through the host platform's admin, or with Convelio directly
+  loader_library: not published
+  package: not published
+  documentation_by_convelio: false
+  note: >-
+    Convelio markets the widget but publishes no technical reference for it — no
+    embed snippet, no configuration schema, no events. That is the gap.
+- name: Convelio Dashboard
+  family: hosted web application
+  url: https://web.convelio.com/
+  description: >-
+    First-party web application where a partner sees every quote and shipment booked
+    (through the widget, the API, or Convelio directly), tracks shipments, and reaches
+    the full shipment history. Referenced from the API itself — the document_ready
+    webhook payload carries a dashboard_order_link, and order examples in the OpenAPI
+    point at https://web.convelio.com/dashboard/order/{id}.
+  embeddable: false
+- name: Convelio Tracking
+  family: hosted shared link
+  url: https://tracking.convelio.com/
+  description: >-
+    Shareable public tracking surface for a shipment. Surfaced through the API as the
+    tracking_link field on the quote_paid webhook payload.
+  embeddable: false
+platform_integrations:
+- partner: Artlogic
+  type: gallery/collection management platform
+  surface: '"Enable the Convelio Shipping Widget" toggle in Artlogic''s own admin'
+  docs: https://support.artlogic.net/hc/en-gb/articles/4403627637778-Enable-the-Convelio-Shipping-Widget
+  note: >-
+    Documented by the partner, not by Convelio — the only public step-by-step for
+    turning the widget on that this pass could find.
+gaps:
+- No public widget documentation, embed snippet, or configuration reference from Convelio.
+- No JS package or CDN loader on any registry.
+- No documented client-side events or callbacks, so a host page cannot react to a completed quote.

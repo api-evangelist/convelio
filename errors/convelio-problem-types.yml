@@ -1,0 +1,88 @@
+generated: '2026-08-09'
+method: derived
+source: openapi/convelio-shipping-openapi.yml
+docs: https://developers.convelio.com/#tag/Error-responses
+format: rfc7807
+format_note: >-
+  Convelio's own schema description cites IETF RFC 7807 (Problem Details for HTTP APIs,
+  now obsoleted by RFC 9457) and states the error model follows the
+  application/problem+json content type. NOTE THE DIVERGENCE: every error response in
+  the OpenAPI document actually declares content type application/json, not
+  application/problem+json. The BODY shape is problem+json (type/title/status/detail);
+  the advertised media type is not. Recorded as-published, not corrected.
+envelope:
+  schema: http-error
+  fields:
+  - {name: type, type: string, description: URL to a page with more detail about the problem — the primary identifier for the problem}
+  - {name: title, type: string, description: Short human-readable summary of the problem}
+  - {name: status, type: integer, description: HTTP status code}
+  - {name: detail, type: string, description: Human-readable explanation specific to this occurrence}
+  type_uri_note: >-
+    The documented example `type` value is the generic W3C RFC 2616 section-10 status
+    code page (http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html), not a
+    Convelio-owned problem-type URI. Convelio therefore publishes no per-problem type
+    registry — a client cannot branch on `type` to distinguish two 422s.
+validation_extension:
+  schema: http-unprocessable-entity-error
+  extends: http-error
+  field: validation_messages
+  shape: '{field_name}: {error_title}: <message>'
+  description: >-
+    Returned only on 422 when a request body is present and invalid. A map keyed by the
+    offending field name, whose value is a map keyed by an error title. Example
+    published by Convelio: delivery_type -> deliveryTypeInvalid -> "Invalid delivery
+    type. Valid values are: curbside, white_glove".
+problems:
+- status: 400
+  title: Bad Request
+  detail: The URL requested is not valid.
+  component: '#/components/responses/bad-request'
+  source_operations: [createShippingQuote, createShippingOrder]
+- status: 401
+  title: Unauthorized
+  detail: Token not found.
+  component: '#/components/responses/unauthorized'
+  remediation: >-
+    Send the Authorization header in the form `token <secret_key>`. Confirm the key mode
+    matches the server — a sk_test_ key only authenticates against
+    api.sandbox.convelio.com, a sk_live_ key only against api.convelio.com.
+  source_operations: [estimateShippingPrice, createShippingQuote, getShippingQuote, createShippingOrder, listWebhooks, createWebhook, getWebhook, updateWebhook, deleteWebhook]
+- status: 403
+  title: Forbidden
+  detail: You are authenticated but not allowed to execute the action.
+  component: '#/components/responses/forbidden'
+  source_operations: [createShippingQuote, getShippingQuote, createShippingOrder, listWebhooks, createWebhook, getWebhook, updateWebhook, deleteWebhook]
+- status: 404
+  title: Not Found
+  detail: Page not found.
+  component: '#/components/responses/not-found'
+  source_operations: [getShippingQuote, getWebhook, updateWebhook, deleteWebhook]
+- status: 422
+  title: Unprocessable Entity
+  detail: The server was unable to process the request.
+  component: '#/components/responses/unprocessable-entity'
+  schema: http-unprocessable-entity-error
+  remediation: >-
+    Read validation_messages to find the offending field. On estimateShippingPrice a 422
+    also carries the non-validation meaning "No shipment estimation available for given
+    request" — i.e. Convelio cannot instantly price this shipment, which is a business
+    outcome rather than a malformed request.
+  source_operations: [estimateShippingPrice, createShippingQuote, getShippingQuote, createShippingOrder, createWebhook, updateWebhook]
+- status: 500
+  title: Internal Server Error
+  detail: There is an internal problem on our server.
+  component: '#/components/responses/internal-server-error'
+  source_operations: [estimateShippingPrice, createShippingQuote, getShippingQuote, createShippingOrder, listWebhooks, createWebhook, getWebhook, updateWebhook, deleteWebhook]
+- status: 503
+  title: Service Unavailable
+  detail: The server is not ready to handle the request.
+  documented_in: http-error schema description
+  in_responses: false
+  note: >-
+    Described in the prose of the http-error schema but NOT declared on any operation's
+    responses in the OpenAPI document. Clients should still handle it.
+gaps:
+- No machine-readable error-code registry — only HTTP status classes.
+- '`type` is a generic W3C status-code URL, so problem types are not individually addressable.'
+- Error responses declare application/json while the docs promise application/problem+json.
+- No Retry-After, rate-limit, or backoff semantics documented on any error.
