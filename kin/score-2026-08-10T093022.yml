@@ -1,0 +1,41 @@
+# Kin Score artifact — convelio — 2026-08-10T093022
+# The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
+---
+kin_score:
+  slug: convelio
+  schema_version: 0.9.1
+  scored_at: '2026-08-10'
+  run_ts: 2026-08-10T093022
+  composite: 48.8
+  band: developing
+  facets:
+    discoverability: 87.0
+    contract_quality: 67.4
+    governance: 20.8
+    operational_transparency: 21.1
+    developer_ergonomics: 65.2
+    commercial_clarity: 34.2
+  agent_readiness:
+    score: 44.1
+    band: agent-ready
+    dimensions:
+      spec_presence: true
+      agentic_access: true
+      mcp_server: false
+      auth_clarity: true
+      idempotency: false
+      error_semantics: false
+      openapi_examples: false
+      rate_limit_signal: false
+      event_surface_described: true
+      agent_skills: true
+      well_known_catalog: false
+      consent_identity: false
+      agent_card: false
+      dry_run_mode: false
+  regulatory:
+    applies: true
+    regime: Insurance
+    regime_id: insurance
+    score: 37.9
+    matched_via: tags

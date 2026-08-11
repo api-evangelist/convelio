@@ -76,6 +76,10 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/convelio-mcp.yml
+- type: Overlay
+  url: overlays/convelio-shipping-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/convelio-agentic-access.yml
 - type: DomainSecurity
