@@ -15,7 +15,7 @@ url: https://raw.githubusercontent.com/api-evangelist/convelio/refs/heads/main/a
 image: https://www.convelio.com/favicon.ico
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-09'
 modified: '2026-08-09'
 tags:
