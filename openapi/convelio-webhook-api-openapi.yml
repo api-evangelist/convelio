@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Convelio Public Webhook API
   version: '2.0'
@@ -289,6 +289,38 @@ webhooks:
           description: Sent from your server when it accepts the callback.
 components:
   schemas:
+    triggering-event-name:
+      title: TriggeringEventName
+      type: string
+      enum:
+      - custom_quote_ready
+      - quote_paid
+      - order_created
+      - shipment_status_changed
+      - document_ready
+    quote-paid-event:
+      title: QuotePaidEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - quote_paid
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            quote_id:
+              type: string
+              description: The Quote ID.
+              format: uuid
+            tracking_link:
+              type: string
+              description: Link to follow the progress of the shipping order.
+              format: uri
+              example: https://tracking.convelio.com/example
     orde-created-event:
       title: OrderCreatedEvent
       type: object
@@ -311,24 +343,61 @@ components:
               type: string
               description: The Order ID.
               format: uuid
-    custom-quote-ready-event:
-      title: CustomQuoteReadyEvent
+    shipment-status:
+      title: ShipmentStatus
+      description: 'The shipment status of the tracked order. Possible values:
+
+        - shipment_created: The Order has been booked and our team is planning collection at the pickup location.
+
+        - picked_up: The items have been collected at the pickup location.
+
+        - packing_in_progress: The items are being packed at one of our crating center for more safety.
+
+        - export_in_progress: The shipment has left our crating center to be sent abroad.
+
+        - freight_in_transit: The shipment is on its way to the delivery location.
+
+        - import_in_progress: The shipment has arrived at country of destination.
+
+        - out_for_delivery: The shipment has arrived the destination facility and the carrier is about to deliver the shipment.
+
+        - shipment_completed: Home, sweet home! The shipment has been delivered to the delivery location.
+
+        - on_hold: The shipment has temporarily been paused.
+
+        - canceled: The shipment has been canceled for some reason.'
+      type: string
+      enum:
+      - shipment_created
+      - picked_up
+      - packing_in_progress
+      - export_in_progress
+      - freight_in_transit
+      - import_in_progress
+      - out_for_delivery
+      - shipment_completed
+      - on_hold
+      - canceled
+    shipment-status-changed-event:
+      title: ShipmentStatusChangedEvent
       type: object
       properties:
         event:
           type: string
           enum:
-          - custom_quote_ready
+          - shipment_status_changed
         created:
           type: string
           format: date-time
         payload:
           type: object
           properties:
-            quote_id:
+            order_id:
               type: string
-              description: The Quote ID.
+              description: The Order ID.
               format: uuid
+            status:
+              $ref: '#/components/schemas/shipment-status'
     http-error:
       title: HttpError
       x-tags:
@@ -385,41 +454,6 @@ components:
       - title
       - status
       - detail
-    shipment-status:
-      title: ShipmentStatus
-      description: 'The shipment status of the tracked order. Possible values:
-
-        - shipment_created: The Order has been booked and our team is planning collection at the pickup location.
-
-        - picked_up: The items have been collected at the pickup location.
-
-        - packing_in_progress: The items are being packed at one of our crating center for more safety.
-
-        - export_in_progress: The shipment has left our crating center to be sent abroad.
-
-        - freight_in_transit: The shipment is on its way to the delivery location.
-
-        - import_in_progress: The shipment has arrived at country of destination.
-
-        - out_for_delivery: The shipment has arrived the destination facility and the carrier is about to deliver the shipment.
-
-        - shipment_completed: Home, sweet home! The shipment has been delivered to the delivery location.
-
-        - on_hold: The shipment has temporarily been paused.
-
-        - canceled: The shipment has been canceled for some reason.'
-      type: string
-      enum:
-      - shipment_created
-      - picked_up
-      - packing_in_progress
-      - export_in_progress
-      - freight_in_transit
-      - import_in_progress
-      - out_for_delivery
-      - shipment_completed
-      - on_hold
-      - canceled
     document-ready-event:
       title: DocumentReadyEvent
       type: object
@@ -445,14 +479,22 @@ components:
               type: string
               description: Link to see the details of the shipping order.
               format: uri
-    quote-paid-event:
-      title: QuotePaidEvent
+    webhook-update:
+      title: RequestBodyUpdateWebhook
+      type: object
+      properties:
+        url:
+          $ref: '#/components/schemas/webhook-url'
+      required:
+      - url
+    custom-quote-ready-event:
+      title: CustomQuoteReadyEvent
       type: object
       properties:
         event:
           type: string
           enum:
-          - quote_paid
+          - custom_quote_ready
         created:
           type: string
           format: date-time
@@ -463,28 +505,6 @@ components:
               type: string
               description: The Quote ID.
               format: uuid
-            tracking_link:
-              type: string
-              description: Link to follow the progress of the shipping order.
-              format: uri
-              example: https://tracking.convelio.com/example
-    webhook-url:
-      title: WebhookUrl
-      description: URL to receive webhooks.
-      type: string
-      format: uri
-      pattern: ^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
-      maxLength: 255
-      example: https://example.com/webhook
-    triggering-event-name:
-      title: TriggeringEventName
-      type: string
-      enum:
-      - custom_quote_ready
-      - quote_paid
-      - order_created
-      - shipment_status_changed
-      - document_ready
     http-unprocessable-entity-error:
       title: HttpUnprocessableEntityError
       x-tags:
@@ -509,34 +529,6 @@ components:
                     example: 'Invalid delivery type. Valid values are: curbside, white_glove'
             required:
             - '{field_name}'
-    shipment-status-changed-event:
-      title: ShipmentStatusChangedEvent
-      type: object
-      properties:
-        event:
-          type: string
-          enum:
-          - shipment_status_changed
-        created:
-          type: string
-          format: date-time
-        payload:
-          type: object
-          properties:
-            order_id:
-              type: string
-              description: The Order ID.
-              format: uuid
-            status:
-              $ref: '#/components/schemas/shipment-status'
-    webhook-update:
-      title: RequestBodyUpdateWebhook
-      type: object
-      properties:
-        url:
-          $ref: '#/components/schemas/webhook-url'
-      required:
-      - url
     webhook:
       title: Webhook
       x-tags:
@@ -562,18 +554,15 @@ components:
       required:
       - url
       - triggering_event_name
+    webhook-url:
+      title: WebhookUrl
+      description: URL to receive webhooks.
+      type: string
+      format: uri
+      pattern: ^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+      maxLength: 255
+      example: https://example.com/webhook
   responses:
-    internal-server-error:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/http-error'
-          example:
-            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-            title: Internal Server Error
-            status: 500
-            detail: There is an internal problem on our server.
     unauthorized:
       description: Unauthorized
       content:
@@ -585,17 +574,6 @@ components:
             title: Unauthorized
             status: 401
             detail: Token not found.
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/http-error'
-          example:
-            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-            title: Forbidden
-            status: 403
-            detail: You are authenticated but not allowed to execute the action.
     unprocessable-entity:
       description: Unprocessable Entity
       content:
@@ -610,6 +588,28 @@ components:
             validation_messages:
               '{field_name}':
                 '{error_title}': 'Invalid delivery type. Valid values are: curbside, white_glove'
+    internal-server-error:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Internal Server Error
+            status: 500
+            detail: There is an internal problem on our server.
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Forbidden
+            status: 403
+            detail: You are authenticated but not allowed to execute the action.
     not-found:
       description: Not Found
       content:
@@ -621,6 +621,23 @@ components:
             title: Not Found
             status: 404
             detail: Page not found.
+  requestBodies:
+    webhook:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/webhook'
+    webhook-update:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook-update'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/webhook-update'
   parameters:
     webhook-id:
       name: webhookId
@@ -649,23 +666,6 @@ components:
         - '*/*'
         - application/json
         default: application/json
-  requestBodies:
-    webhook:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/webhook'
-        application/vnd.convelio-shipping.v2+json:
-          schema:
-            $ref: '#/components/schemas/webhook'
-    webhook-update:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/webhook-update'
-        application/vnd.convelio-shipping.v2+json:
-          schema:
-            $ref: '#/components/schemas/webhook-update'
   securitySchemes:
     convelio_signature:
       name: X-Convelio-signature

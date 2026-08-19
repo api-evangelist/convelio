@@ -1,0 +1,1681 @@
+{
+  "item": [
+    {
+      "id": "e5c66267-65d1-43da-8bf4-d9edff7cbf4b",
+      "name": "shipping",
+      "description": {
+        "content": "Shipping API allow you to request a shipping estimate from our system",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "22a4d7c9-aa6f-48f4-8a44-9d6243cff318",
+          "name": "Shipment estimation",
+          "request": {
+            "name": "Shipment estimation",
+            "description": {
+              "content": "Use this endpoint to obtain a first estimation for a shipment.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shipping",
+                "estimate",
+                "price"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "EUR",
+                  "description": "Currency to use for the response. Accepted currencies are EUR, USD and GBP."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delivery\": {\n    \"type\": \"curbside\",\n    \"address\": {\n      \"country_code\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"postcode\": \"<string>\"\n    },\n    \"contact\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"email\": \"<email>\",\n      \"phone\": \"<string>\",\n      \"additional_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"additional_phones\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"company_name\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"shipping_speed\": \"regular_speed\",\n  \"direct_label_request\": \"cheapest_option\",\n  \"contract_insurance\": false,\n  \"pickups\": [\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"<string>\",\n        \"street\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postcode\": \"<string>\"\n      },\n      \"company_name\": \"<string>\",\n      \"contacts\": [\n        {\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<email>\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"<string>\"\n    },\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"<string>\",\n        \"street\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postcode\": \"<string>\"\n      },\n      \"company_name\": \"<string>\",\n      \"contacts\": [\n        {\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<email>\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d7d87d94-8458-4cdf-bb91-56730b03b2ef",
+              "name": "Shipment rate estimation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "estimate",
+                    "price"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"currency_code\": \"EUR\",\n  \"vat_excluded_amount\": 10000,\n  \"vat_included_amount\": 12000,\n  \"vat_amount\": 2000,\n  \"insurance_amount\": 700\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac2cec64-c5ec-412a-9427-8969d5b509af",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "estimate",
+                    "price"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Token not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b62676b-84d4-409f-b30c-0b712a5010ab",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "estimate",
+                    "price"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unprocessable Entity\",\n  \"status\": 422,\n  \"detail\": \"The server was unable to process the request.\",\n  \"validation_messages\": {\n    \"{field_name}\": {\n      \"{error_title}\": \"Invalid delivery type. Valid values are: curbside, white_glove\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0b510bd-96f7-4e88-89cb-7db3dc574bd0",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "estimate",
+                    "price"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"There is an internal problem on our server.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4364fb9-5701-450f-b423-1f9978d921b3",
+          "name": "Request a quote",
+          "request": {
+            "name": "Request a quote",
+            "description": {
+              "content": "Get a quote from Convelio. An operations representative will get in contact with you if necessary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shipping",
+                "quote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "EUR",
+                  "description": "Currency to use for the response. Accepted currencies are EUR, USD and GBP."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delivery\": {\n    \"type\": \"curbside\",\n    \"address\": {\n      \"country_code\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"postcode\": \"<string>\"\n    },\n    \"contact\": {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"email\": \"<email>\",\n      \"phone\": \"<string>\",\n      \"additional_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"additional_phones\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"company_name\": \"<string>\",\n    \"additional_info\": \"<string>\"\n  },\n  \"shipping_speed\": \"<string>\",\n  \"pickups\": [\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"<string>\",\n        \"street\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postcode\": \"<string>\"\n      },\n      \"company_name\": \"<string>\",\n      \"contacts\": [\n        {\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<email>\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"<string>\"\n    },\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"<string>\",\n        \"street\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postcode\": \"<string>\"\n      },\n      \"company_name\": \"<string>\",\n      \"contacts\": [\n        {\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<email>\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"<string>\"\n    }\n  ],\n  \"direct_label_request\": \"cheapest_option\",\n  \"contract_insurance\": false,\n  \"customer_email\": \"<email>\",\n  \"customer_reference_number\": \"<string>\",\n  \"additional_info\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "02eeb52c-d660-470c-a699-bdf7a96a2af2",
+              "name": "Quote created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"quote_reference_number\": \"QVO-001\",\n  \"shipping_speed\": \"<string>\",\n  \"direct_label_request\": \"cheapest_option\",\n  \"delivery\": {\n    \"type\": \"curbside\",\n    \"address\": {\n      \"country_code\": \"FR\",\n      \"street\": \"42 rue des allees\",\n      \"city\": \"Paris\",\n      \"state\": \"Ile-de-france\",\n      \"postcode\": \"75004\"\n    },\n    \"contact\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"email\": \"john.doe@exemple.com\",\n      \"phone\": \"<string>\",\n      \"additional_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"additional_phones\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"company_name\": \"Company Name LTD\",\n    \"additional_info\": \"Additional information regarding the delivery.\"\n  },\n  \"pickups\": [\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"FR\",\n        \"street\": \"42 rue des allees\",\n        \"city\": \"Paris\",\n        \"state\": \"Ile-de-france\",\n        \"postcode\": \"75004\"\n      },\n      \"company_name\": \"Company Name LTD\",\n      \"contacts\": [\n        {\n          \"first_name\": \"John\",\n          \"last_name\": \"Doe\",\n          \"email\": \"john.doe@exemple.com\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"Additional information regarding the pickup.\"\n    },\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"FR\",\n        \"street\": \"42 rue des allees\",\n        \"city\": \"Paris\",\n        \"state\": \"Ile-de-france\",\n        \"postcode\": \"75004\"\n      },\n      \"company_name\": \"Company Name LTD\",\n      \"contacts\": [\n        {\n          \"first_name\": \"John\",\n          \"last_name\": \"Doe\",\n          \"email\": \"john.doe@exemple.com\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"Additional information regarding the pickup.\"\n    }\n  ],\n  \"share_link\": \"https://web.convelio.com/sharelinkencoded\",\n  \"contract_insurance\": false,\n  \"customer_email\": \"person@example.com\",\n  \"price\": {\n    \"currency_code\": \"EUR\",\n    \"vat_excluded_amount\": 10000,\n    \"vat_included_amount\": 12000,\n    \"vat_amount\": 2000,\n    \"insurance_amount\": 700\n  },\n  \"status\": \"created\",\n  \"customer_reference_number\": \"CRN123456789\",\n  \"additional_info\": \"Additional information for customs.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f846e0d-c40c-40e1-ade0-929511393399",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Bad Request.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9516dd70-bd99-4cda-8382-d9ef5b424535",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Token not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41fbb8be-e480-439c-83b2-2cccd56bd776",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"You are authenticated but not allowed to execute the action.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8951b422-77f8-4349-b3a9-43130591ca43",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unprocessable Entity\",\n  \"status\": 422,\n  \"detail\": \"The server was unable to process the request.\",\n  \"validation_messages\": {\n    \"{field_name}\": {\n      \"{error_title}\": \"Invalid delivery type. Valid values are: curbside, white_glove\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eec956a1-4dcd-410f-bd32-ffc25d49d4b6",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"There is an internal problem on our server.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1ce4d3b6-c3c5-4e7d-a51b-92306ac4dd4d",
+          "name": "Get quote",
+          "request": {
+            "name": "Get quote",
+            "description": {
+              "content": "Retrieve a quote by its ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shipping",
+                "quote",
+                ":quoteId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quoteId",
+                  "description": "(Required) Quote ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "Authorization"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a92ed5bb-3b0c-4823-9ca5-46629479dc69",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) Quote ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"quote_reference_number\": \"QVO-001\",\n  \"shipping_speed\": \"<string>\",\n  \"direct_label_request\": \"cheapest_option\",\n  \"delivery\": {\n    \"type\": \"curbside\",\n    \"address\": {\n      \"country_code\": \"FR\",\n      \"street\": \"42 rue des allees\",\n      \"city\": \"Paris\",\n      \"state\": \"Ile-de-france\",\n      \"postcode\": \"75004\"\n    },\n    \"contact\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"email\": \"john.doe@exemple.com\",\n      \"phone\": \"<string>\",\n      \"additional_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"additional_phones\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"company_name\": \"Company Name LTD\",\n    \"additional_info\": \"Additional information regarding the delivery.\"\n  },\n  \"pickups\": [\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"FR\",\n        \"street\": \"42 rue des allees\",\n        \"city\": \"Paris\",\n        \"state\": \"Ile-de-france\",\n        \"postcode\": \"75004\"\n      },\n      \"company_name\": \"Company Name LTD\",\n      \"contacts\": [\n        {\n          \"first_name\": \"John\",\n          \"last_name\": \"Doe\",\n          \"email\": \"john.doe@exemple.com\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"Additional information regarding the pickup.\"\n    },\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"FR\",\n        \"street\": \"42 rue des allees\",\n        \"city\": \"Paris\",\n        \"state\": \"Ile-de-france\",\n        \"postcode\": \"75004\"\n      },\n      \"company_name\": \"Company Name LTD\",\n      \"contacts\": [\n        {\n          \"first_name\": \"John\",\n          \"last_name\": \"Doe\",\n          \"email\": \"john.doe@exemple.com\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"Additional information regarding the pickup.\"\n    }\n  ],\n  \"share_link\": \"https://web.convelio.com/sharelinkencoded\",\n  \"contract_insurance\": false,\n  \"customer_email\": \"person@example.com\",\n  \"price\": {\n    \"currency_code\": \"EUR\",\n    \"vat_excluded_amount\": 10000,\n    \"vat_included_amount\": 12000,\n    \"vat_amount\": 2000,\n    \"insurance_amount\": 700\n  },\n  \"status\": \"created\",\n  \"customer_reference_number\": \"CRN123456789\",\n  \"additional_info\": \"Additional information for customs.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9224e45-3e17-4fe4-905c-a00a58411486",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) Quote ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Token not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19113fb5-5bd6-4f60-b39c-3b174ab637fb",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) Quote ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"You are authenticated but not allowed to execute the action.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c49fc471-599d-4d7d-afb2-709129a0bc01",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) Quote ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Not Found\",\n  \"status\": 404,\n  \"detail\": \"Page not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d42841fc-faa0-4b0e-903c-cce1d4ea411b",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) Quote ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unprocessable Entity\",\n  \"status\": 422,\n  \"detail\": \"The server was unable to process the request.\",\n  \"validation_messages\": {\n    \"{field_name}\": {\n      \"{error_title}\": \"Invalid delivery type. Valid values are: curbside, white_glove\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78ec0efb-85a5-4f77-b42c-b4781d5deb2b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "quote",
+                    ":quoteId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quoteId",
+                      "description": "(Required) Quote ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"There is an internal problem on our server.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2f60130-23d6-4df0-a571-9186c66ba29c",
+          "name": "Create an Order",
+          "request": {
+            "name": "Create an Order",
+            "description": {
+              "content": "Create an order for given Quote ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shipping",
+                "order"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "EUR",
+                  "description": "Currency to use for the response. Accepted currencies are EUR, USD and GBP."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_id\": \"<uuid>\",\n  \"billing_details\": {\n    \"name\": \"<string>\",\n    \"email\": \"<email>\",\n    \"phone\": \"<string>\",\n    \"address\": {\n      \"country_code\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"postcode\": \"<string>\"\n    },\n    \"vat_number\": \"<string>\",\n    \"customer_reference_number\": \"<string>\",\n    \"eori_number\": \"<string>\"\n  },\n  \"customer_reference_number\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "29c0caea-9161-4bf5-8187-ae87dbeac2d6",
+              "name": "Order Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"order_reference_number\": \"CVO-288\",\n  \"contract_insurance\": false,\n  \"shipping_speed\": \"<string>\",\n  \"pickups\": [\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"FR\",\n        \"street\": \"42 rue des allees\",\n        \"city\": \"Paris\",\n        \"state\": \"Ile-de-france\",\n        \"postcode\": \"75004\"\n      },\n      \"company_name\": \"Company Name LTD\",\n      \"contacts\": [\n        {\n          \"first_name\": \"John\",\n          \"last_name\": \"Doe\",\n          \"email\": \"john.doe@exemple.com\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"Additional information regarding the pickup.\"\n    },\n    {\n      \"items\": [\n        {\n          \"current_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"height\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"length\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"width\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"quantity\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"desired_packing\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"measurement_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"materials\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"weight\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"address\": {\n        \"country_code\": \"FR\",\n        \"street\": \"42 rue des allees\",\n        \"city\": \"Paris\",\n        \"state\": \"Ile-de-france\",\n        \"postcode\": \"75004\"\n      },\n      \"company_name\": \"Company Name LTD\",\n      \"contacts\": [\n        {\n          \"first_name\": \"John\",\n          \"last_name\": \"Doe\",\n          \"email\": \"john.doe@exemple.com\",\n          \"phone\": \"<string>\",\n          \"additional_emails\": [\n            \"<email>\",\n            \"<email>\"\n          ],\n          \"additional_phones\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"additional_info\": \"Additional information regarding the pickup.\"\n    }\n  ],\n  \"delivery\": {\n    \"type\": \"curbside\",\n    \"address\": {\n      \"country_code\": \"FR\",\n      \"street\": \"42 rue des allees\",\n      \"city\": \"Paris\",\n      \"state\": \"Ile-de-france\",\n      \"postcode\": \"75004\"\n    },\n    \"contact\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"email\": \"john.doe@exemple.com\",\n      \"phone\": \"<string>\",\n      \"additional_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"additional_phones\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"company_name\": \"Company Name LTD\",\n    \"additional_info\": \"Additional information regarding the delivery.\"\n  },\n  \"price\": {\n    \"currency_code\": \"EUR\",\n    \"vat_excluded_amount\": 10000,\n    \"vat_included_amount\": 12000,\n    \"vat_amount\": 2000,\n    \"insurance_amount\": 700\n  },\n  \"billing_details\": {\n    \"name\": \"Art center\",\n    \"email\": \"art@center.org\",\n    \"phone\": \"<string>\",\n    \"address\": {\n      \"country_code\": \"FR\",\n      \"street\": \"42 rue des allees\",\n      \"city\": \"Paris\",\n      \"state\": \"Ile-de-france\",\n      \"postcode\": \"75004\"\n    },\n    \"vat_number\": \"GB12345697\",\n    \"customer_reference_number\": \"REF123456\",\n    \"eori_number\": \"DE 1234567890 8\"\n  },\n  \"tracking_link\": \"https://tracking.convelio.com/example\",\n  \"dashboard_order_link\": \"https://web.convelio.com/dashboard/order/288\",\n  \"customer_reference_number\": \"REF123456\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e54658b-cf1d-4c69-b299-1294bfcc3967",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Bad Request.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ed46e47-7116-46ef-8b62-c599c16fd17b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Token not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c658e1f-8832-46a6-b5c6-814220b71c1c",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"You are authenticated but not allowed to execute the action.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba8b759b-7b95-4d16-b05e-61e2cc2a45a3",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Unprocessable Entity\",\n  \"status\": 422,\n  \"detail\": \"The server was unable to process the request.\",\n  \"validation_messages\": {\n    \"{field_name}\": {\n      \"{error_title}\": \"Invalid delivery type. Valid values are: curbside, white_glove\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71caf573-8615-4aee-b483-de9e60d8b64b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shipping",
+                    "order"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`",
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Accept header should be sent and should be `application/json`",
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"There is an internal problem on our server.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sandbox.convelio.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "97acd5f1-1c0b-4210-be1a-9425fd67428f",
+    "name": "Convelio Public Shipping API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "**This document describes the current version (2.0) of the Shipping API.**\n\nThe Convelio API is organized around REST. Our API has predictable resource-oriented urls, accept and return json-encoded requests and\nresponses. It also use standard HTTP response codes, authentication, and verbs.\n\nYou can use the Convelio API in sandbox mode, which does not affect your live data or interact with the live api.\nThe API key you use to authenticate the request determine whether the request is live mode or sandbox mode.\n\n# API key\nConvelio authenticates your API requests using your account’s API key. If you do not include your key when making an API request,\nor use one that is incorrect, Convelio returns an error.\n\nYour API key has a *Secret* type, prefixed by *sk*, and should be kept confidential and only stored on your own servers.\nYour account’s secret API key can perform any API request to Convelio without restriction.\n\nThere are also two **modes** for your API key: *live* and *test*.\n- *live* key can only be used on our production server.\n- *test* key can only be used on our sandbox server.\n\n<b>Example of key by modes</b>\n\n| **Type** \\\\ **Mode** | Test                              | Live                              |\n|---------------------|-----------------------------------|-----------------------------------|\n| Secret              | REDACTED_STRIPE_KEY | REDACTED_STRIPE_KEY |\n\n<b>Obtaining your API key</b>\n\nTo get your API key, please send your request at api@convelio.com.\n\nContact Support:\n Name: Convelio API Team\n Email: api@convelio.com",
+      "type": "text/plain"
+    }
+  }
+}

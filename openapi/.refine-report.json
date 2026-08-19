@@ -1,19 +1,20 @@
 {
   "provider": "convelio",
   "sources": [
-    "convelio-shipping-openapi.yml"
+    "convelio-shipping-api-openapi.yml",
+    "convelio-webhook-api-openapi.yml"
   ],
   "outputs": [
     "convelio-shipping-api-openapi.yml",
     "convelio-webhook-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/convelio-shipping-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
-    "apis.yml register: written (+2 apis, 2 total)"
+    "convelio-shipping-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "convelio-webhook-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
   ],
   "skipped": []
 }
