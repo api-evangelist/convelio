@@ -24,6 +24,17 @@ tags:
 - Shipping
 - Fine Art
 - Freight
+- E-Commerce
+- Quotes
+- Webhook
+- Customs
+- Insurance
+tags_raw:
+- Company
+- Logistics
+- Shipping
+- Fine Art
+- Freight
 - Ecommerce
 - Quotes
 - Webhooks
@@ -36,6 +47,8 @@ apis:
   humanURL: https://developers.convelio.com/
   baseURL: https://api.convelio.com/v2
   tags:
+  - Shipping
+  tags_raw:
   - shipping
   properties:
   - type: OpenAPI
@@ -56,6 +69,8 @@ apis:
   humanURL: https://developers.convelio.com/
   baseURL: https://api.convelio.com/v2
   tags:
+  - Webhook
+  tags_raw:
   - webhook
   properties:
   - type: OpenAPI
