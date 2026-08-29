@@ -1,0 +1,25 @@
+slug: convelio
+provider: Convelio
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: shipping
+  spec_file: convelio-shipping-api-openapi.yml
+  capability_id: BC-2450.10
+  capability_id_l1: BC-2450
+  capability_name: Shipper Quotation Management
+  confidence: 0.85
+  evidence: POST /shipping/estimate/price Shipment estimation; POST /shipping/quote Request a quote; POST
+    /shipping/order Create an Order
+  reason: Convelio is a fine-art freight forwarder; the API issues door-to-door shipping price estimates
+    and quotes to shippers and converts them into transport orders — shipper quotation management.
