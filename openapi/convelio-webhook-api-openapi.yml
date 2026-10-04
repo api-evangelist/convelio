@@ -248,34 +248,6 @@ webhooks:
         '204':
           description: Sent from your server when it accepts the callback.
 components:
-  parameters:
-    webhook-id:
-      name: webhookId
-      description: Webhook ID
-      in: path
-      schema:
-        type: string
-      required: true
-    accept:
-      description: Accept header should be sent and should be `application/json`
-      name: Accept
-      in: header
-      schema:
-        type: string
-        enum:
-        - '*/*'
-        - application/json
-        default: application/json
-    json-content-type:
-      name: Content-Type
-      description: Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`
-      in: header
-      schema:
-        type: string
-        enum:
-        - application/json
-        - application/vnd.convelio-shipping.v2+json
-        default: application/json
   schemas:
     orde-created-event:
       title: OrderCreatedEvent
@@ -299,15 +271,6 @@ components:
               type: string
               description: The Order ID.
               format: uuid
-    triggering-event-name:
-      title: TriggeringEventName
-      type: string
-      enum:
-      - custom_quote_ready
-      - quote_paid
-      - order_created
-      - shipment_status_changed
-      - document_ready
     custom-quote-ready-event:
       title: CustomQuoteReadyEvent
       type: object
@@ -326,6 +289,49 @@ components:
               type: string
               description: The Quote ID.
               format: uuid
+    quote-paid-event:
+      title: QuotePaidEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - quote_paid
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            quote_id:
+              type: string
+              description: The Quote ID.
+              format: uuid
+            tracking_link:
+              type: string
+              description: Link to follow the progress of the shipping order.
+              format: uri
+              example: https://tracking.convelio.com/example
+    shipment-status-changed-event:
+      title: ShipmentStatusChangedEvent
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - shipment_status_changed
+        created:
+          type: string
+          format: date-time
+        payload:
+          type: object
+          properties:
+            order_id:
+              type: string
+              description: The Order ID.
+              format: uuid
+            status:
+              $ref: '#/components/schemas/shipment-status'
     document-ready-event:
       title: DocumentReadyEvent
       type: object
@@ -386,26 +392,6 @@ components:
       - shipment_completed
       - on_hold
       - canceled
-    shipment-status-changed-event:
-      title: ShipmentStatusChangedEvent
-      type: object
-      properties:
-        event:
-          type: string
-          enum:
-          - shipment_status_changed
-        created:
-          type: string
-          format: date-time
-        payload:
-          type: object
-          properties:
-            order_id:
-              type: string
-              description: The Order ID.
-              format: uuid
-            status:
-              $ref: '#/components/schemas/shipment-status'
     http-error:
       title: HttpError
       x-tags:
@@ -486,37 +472,6 @@ components:
                     example: 'Invalid delivery type. Valid values are: curbside, white_glove'
             required:
             - '{field_name}'
-    webhook-url:
-      title: WebhookUrl
-      description: URL to receive webhooks.
-      type: string
-      format: uri
-      pattern: ^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
-      maxLength: 255
-      example: https://example.com/webhook
-    quote-paid-event:
-      title: QuotePaidEvent
-      type: object
-      properties:
-        event:
-          type: string
-          enum:
-          - quote_paid
-        created:
-          type: string
-          format: date-time
-        payload:
-          type: object
-          properties:
-            quote_id:
-              type: string
-              description: The Quote ID.
-              format: uuid
-            tracking_link:
-              type: string
-              description: Link to follow the progress of the shipping order.
-              format: uri
-              example: https://tracking.convelio.com/example
     webhook:
       title: Webhook
       x-tags:
@@ -542,6 +497,23 @@ components:
       required:
       - url
       - triggering_event_name
+    triggering-event-name:
+      title: TriggeringEventName
+      type: string
+      enum:
+      - custom_quote_ready
+      - quote_paid
+      - order_created
+      - shipment_status_changed
+      - document_ready
+    webhook-url:
+      title: WebhookUrl
+      description: URL to receive webhooks.
+      type: string
+      format: uri
+      pattern: ^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+      maxLength: 255
+      example: https://example.com/webhook
     webhook-update:
       title: RequestBodyUpdateWebhook
       type: object
@@ -551,28 +523,17 @@ components:
       required:
       - url
   responses:
-    unauthorized:
-      description: Unauthorized
+    not-found:
+      description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/http-error'
           example:
             type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-            title: Unauthorized
-            status: 401
-            detail: Token not found.
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/http-error'
-          example:
-            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-            title: Forbidden
-            status: 403
-            detail: You are authenticated but not allowed to execute the action.
+            title: Not Found
+            status: 404
+            detail: Page not found.
     unprocessable-entity:
       description: Unprocessable Entity
       content:
@@ -587,17 +548,6 @@ components:
             validation_messages:
               '{field_name}':
                 '{error_title}': 'Invalid delivery type. Valid values are: curbside, white_glove'
-    not-found:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/http-error'
-          example:
-            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-            title: Not Found
-            status: 404
-            detail: Page not found.
     internal-server-error:
       description: Internal Server Error
       content:
@@ -609,15 +559,29 @@ components:
             title: Internal Server Error
             status: 500
             detail: There is an internal problem on our server.
-  requestBodies:
-    webhook-update:
+    forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/webhook-update'
-        application/vnd.convelio-shipping.v2+json:
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Forbidden
+            status: 403
+            detail: You are authenticated but not allowed to execute the action.
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
           schema:
-            $ref: '#/components/schemas/webhook-update'
+            $ref: '#/components/schemas/http-error'
+          example:
+            type: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            title: Unauthorized
+            status: 401
+            detail: Token not found.
+  requestBodies:
     webhook:
       content:
         application/json:
@@ -626,6 +590,42 @@ components:
         application/vnd.convelio-shipping.v2+json:
           schema:
             $ref: '#/components/schemas/webhook'
+    webhook-update:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/webhook-update'
+        application/vnd.convelio-shipping.v2+json:
+          schema:
+            $ref: '#/components/schemas/webhook-update'
+  parameters:
+    accept:
+      description: Accept header should be sent and should be `application/json`
+      name: Accept
+      in: header
+      schema:
+        type: string
+        enum:
+        - '*/*'
+        - application/json
+        default: application/json
+    webhook-id:
+      name: webhookId
+      description: Webhook ID
+      in: path
+      schema:
+        type: string
+      required: true
+    json-content-type:
+      name: Content-Type
+      description: Content-Type header should be sent and should be `application/vnd.convelio-shipping.v2+json`
+      in: header
+      schema:
+        type: string
+        enum:
+        - application/json
+        - application/vnd.convelio-shipping.v2+json
+        default: application/json
   securitySchemes:
     convelio_signature:
       name: X-Convelio-signature
