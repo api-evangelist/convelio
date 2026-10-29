@@ -64,37 +64,128 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Convelio is a Paris- and London-based tech-enabled fine art logistics company that moves
-high-value, fragile and oversized objects — paintings, sculpture, antiques and design —
-for galleries, auction houses, art fairs, dealers, collectors and online marketplaces.
-Its differentiator is an instant-pricing engine that returns an all-inclusive
-door-to-door shipping price (packing, crating, customs, road/air/sea freight, insurance
-and white-glove delivery) in place of the multi-day manual quoting the art-handling
-trade traditionally runs on.
+Convelio is a Paris- and London-based tech-enabled fine art logistics company that moves high-value, fragile and oversized objects — paintings, sculpture, antiques and design — for galleries, auction houses, art fairs, dealers, collectors and online marketplaces. Its differentiator is an instant-pricing engine that returns an all-inclusive door-to-door shipping price (packing, crating, customs, road/air/sea freight, insurance and white-glove delivery) in place of the multi-day manual quoting the art-handling trade traditionally runs on. Convelio exposes that engine to partners as the Convelio Public API — a REST Shipping API (v2.0) documented with OpenAPI 3.1 at developers.convelio.com — plus an embeddable checkout widget, a web dashboard and a tracking surface, so marketplaces and auction platforms can price, book and track fine art shipments inside their own product.
 
-## API surface
+**Areas:** Company · Logistics · Shipping · Fine Art · Freight · E-Commerce · Quotes · Webhook · Customs · Insurance
 
-Convelio exposes that engine as the **Convelio Public API** — a REST Shipping API (v2.0)
-documented with OpenAPI 3.1 at [developers.convelio.com](https://developers.convelio.com/) —
-plus an embeddable checkout widget, a web dashboard and a public tracking surface.
+## Convelio on APIs.io
 
-- **Production** `https://api.convelio.com/v2` · **Sandbox** `https://api.sandbox.convelio.com/v2`
-- 6 paths / 9 operations: estimate a price, create and read a quote, create an order, and
-  manage webhook subscriptions.
-- 5 events declared in the OpenAPI 3.1 `webhooks` block — `custom_quote_ready`,
-  `quote_paid`, `order_created`, `shipment_status_changed`, `document_ready` — delivered
-  over HTTP POST and signed with an HMAC-SHA256 `X-Convelio-signature` header.
-- Authentication is a single secret API key (`Authorization: token <key>`) whose
-  `sk_test_` / `sk_live_` prefix selects the environment. Keys are issued by emailing
-  api@convelio.com; there is no self-service provisioning.
+Everything profiled for Convelio is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/convelio/](https://apis.io/providers/convelio/)** — or go straight to one of the APIs or properties below.
 
-Convelio serves no standalone `/openapi.json` — the specification captured in `openapi/`
-was read from the server-rendered Redoc payload the developer portal itself publishes.
+### APIs (2)
 
-## Links
+- [Convelio Shipping API](https://apis.io/apis/convelio/convelio-shipping-api/) — Shipping API allow you to request a shipping estimate from our system
+- [Convelio Webhook API](https://apis.io/apis/convelio/convelio-webhook-api/) — The Webhook API allows an API partner to create and manage webhooks.
 
-- Website — <https://www.convelio.com/>
-- Developer portal / API reference — <https://developers.convelio.com/>
-- API status — <https://developers.convelio.com/status>
-- Help centre — <https://help.convelio.com/en>
-- API & Widget overview — <https://www.convelio.com/en/convelio-api/>
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Convelio Webhooks](https://apis.io/asyncapis/convelio/convelio-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [convelio-mcp.yml](https://apis.io/servers/convelio/convelio-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Convelio Agentic Access](https://apis.io/agentic-access/convelio/convelio-agentic-access/)
+
+#### Collections (2)
+
+Postman and Open Collection request collections.
+
+- [Convelio Public Shipping API](https://apis.io/collections/convelio/open-convelio-shipping-api/)
+- [Convelio Public Webhook API](https://apis.io/collections/convelio/open-convelio-webhook-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Convelio Shipping Overlay](https://apis.io/overlays/convelio/convelio-shipping-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Convelio Authentication](https://apis.io/security/convelio/convelio-authentication/)
+- [Convelio Domain Security](https://apis.io/security/convelio/convelio-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.convelio.com/)
+- [Documentation](https://developers.convelio.com/)
+- [Getting started](https://developers.convelio.com/#section/API-key)
+- [API reference](https://developers.convelio.com/#tag/shipping)
+- [Sign up](https://web.convelio.com/auth/signup-email)
+- [Support](https://help.convelio.com/en)
+- [Blog](https://www.convelio.com/en/blog/)
+- [Terms of service](https://www.convelio.com/en/terms/)
+- [Privacy policy](https://www.convelio.com/en/privacy/)
+- [GitHub](https://github.com/convelio)
+- [Status](https://developers.convelio.com/status)
+
+## API Evangelist rating
+
+**Kin Score 43.4** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 63.8 |
+| Contract governance | 4.5 |
+| Operational transparency | 26.3 |
+| Developer ergonomics | 56.5 |
+| Access clarity | 27.6 |
+
+**Agent readiness 24.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 21.9** — Insurance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/convelio/](https://apis.io/providers/convelio/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Convelio: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/convelio/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
